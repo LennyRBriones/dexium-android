@@ -1,3 +1,88 @@
 <resources>
     <string name="app_name">Dexium</string>
+
+    <!-- Splash -->
+    <string name="splash_subtitle">Tu Pokédex Definitiva</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome">Bienvenido a Dexium</string>
+    <string name="onboarding_choose">Elige cómo se mostrarán las criaturas</string>
+    <string name="onboarding_animated_title">Animado 3D</string>
+    <string name="onboarding_animated_desc">Sprites animados\ncon movimiento</string>
+    <string name="onboarding_artwork_title">Artworks</string>
+    <string name="onboarding_artwork_desc">Artwork oficial\nAhorra datos</string>
+    <string name="onboarding_change_later">Puedes cambiar esto después en ajustes</string>
+    <string name="onboarding_get_started">Comenzar</string>
+
+    <!-- Home -->
+    <string name="search_placeholder">Buscar…</string>
+    <string name="loading_creatures">Cargando…</string>
+    <string name="filter_all">Todos</string>
+    <string name="filter_other">Otros</string>
+    <string name="refresh">Actualizar</string>
+    <string name="settings">Ajustes</string>
+
+    <!-- Empty / Error states -->
+    <string name="error_no_connection">Sin Conexión</string>
+    <string name="error_something_wrong">Algo salió mal</string>
+    <string name="error_retry">Reintentar</string>
+    <string name="empty_no_results">Sin Resultados</string>
+    <string name="empty_no_results_for">No se encontraron resultados para \"%1$s\". Intenta otro nombre.</string>
+
+    <!-- Detail -->
+    <string name="section_sprites">Sprites</string>
+    <string name="section_evolution">Cadena Evolutiva</string>
+    <string name="section_stats">Estadísticas Base</string>
+    <string name="section_about">Acerca de</string>
+    <string name="section_abilities">Habilidades</string>
+    <string name="label_height">Altura</string>
+    <string name="label_weight">Peso</string>
+    <string name="label_base_exp">Exp Base</string>
+    <string name="label_habitat">Hábitat</string>
+    <string name="label_hidden">Oculta</string>
+    <string name="label_legendary">Legendario</string>
+    <string name="label_mythical">Mítico</string>
+    <string name="toggle_show_sprite">Mostrar Sprite</string>
+    <string name="toggle_show_shiny">Mostrar Sprite Shiny</string>
+    <string name="label_shiny">Shiny</string>
+    <string name="label_no_shiny">No hay sprite shiny disponible</string>
+    <string name="loading_details">Cargando detalles…</string>
+
+    <!-- About / Settings -->
+    <string name="about_title">Acerca de</string>
+    <string name="about_version">v1.0</string>
+    <string name="about_subtitle">Tu Compañero Pokédex Definitivo</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_animated_sprites">Sprites Animados 3D</string>
+    <string name="settings_animated_on">Mostrando sprites animados</string>
+    <string name="settings_animated_off">Mostrando artworks oficiales</string>
+    <string name="settings_imperial">Unidades Imperiales</string>
+    <string name="settings_imperial_on">Usando ft/in y lbs</string>
+    <string name="settings_imperial_off">Usando metros y kg</string>
+    <string name="data_title">Datos Offline</string>
+    <string name="data_cached">Cacheados: %1$d / %2$d</string>
+    <string name="data_download">Descargar Todos los Datos</string>
+    <string name="data_downloading">Descargando…</string>
+    <string name="data_erase">Borrar Datos Descargados</string>
+    <string name="credits_developed_by">Desarrollado por</string>
+    <string name="credits_powered_by">Powered by PokéAPI</string>
+    <string name="disclaimer">Esta aplicación no está afiliada, respaldada ni patrocinada por Nintendo, The Pokémon Company ni Game Freak. Pokémon y todas las marcas relacionadas son propiedad de sus respectivos dueños. Todos los datos proporcionados por PokéAPI.</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_download_title">¿Descargar Todos los Datos?</string>
+    <string name="dialog_download_message">Esto descargará datos de todas las criaturas. Puede usar una cantidad significativa de datos móviles.\n\nRecomendamos hacerlo por Wi-Fi.</string>
+    <string name="dialog_download_confirm">Descargar</string>
+    <string name="dialog_erase_title">¿Borrar Datos Descargados?</string>
+    <string name="dialog_erase_message">Esto eliminará todos los datos cacheados de tu dispositivo. Necesitarás conexión a internet para navegar de nuevo.</string>
+    <string name="dialog_erase_confirm">Borrar</string>
+    <string name="dialog_animated_title">¿Activar Sprites Animados?</string>
+    <string name="dialog_animated_message">Los sprites animados 3D usan más datos al cargar. Esto puede aumentar tu consumo de datos móviles.\n\nRecomendamos usar Wi-Fi para la mejor experiencia.</string>
+    <string name="dialog_animated_confirm">Activar</string>
+    <string name="dialog_cancel">Cancelar</string>
+
+    <!-- Dex Categories -->
+    <string name="dex_national">Dex Nacional</string>
+    <string name="dex_mega">Mega Dex</string>
+    <string name="dex_gigantamax">Gigantamax Dex</string>
+    <string name="dex_forms">Dex Formas</string>
 </resources>
