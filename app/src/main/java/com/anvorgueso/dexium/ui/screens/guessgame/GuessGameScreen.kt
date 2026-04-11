@@ -188,11 +188,13 @@ fun GuessGameScreen(
                 )
             }
 
+            Spacer(modifier = Modifier.weight(0.3f))
+
             // Play cry button
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 32.dp),
                 contentAlignment = Alignment.Center
             ) {
                 val cryScale by animateFloatAsState(
@@ -224,23 +226,6 @@ fun GuessGameScreen(
                         )
                     }
                 }
-            }
-
-            // Feedback text
-            if (uiState.showFeedback) {
-                Text(
-                    text = if (uiState.isCorrect)
-                        stringResource(R.string.guess_correct)
-                    else
-                        stringResource(R.string.guess_wrong_answer, uiState.pokemonName),
-                    color = if (uiState.isCorrect) SuccessGreen else ErrorRed,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 12.dp)
-                )
             }
 
             // 3 option buttons

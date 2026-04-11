@@ -70,16 +70,6 @@ fun GameResultScreen(
         else -> ErrorRed
     }
 
-    val message = stringResource(
-        when {
-            percentage >= 1f -> R.string.guess_result_perfect
-            percentage >= 0.8f -> R.string.guess_result_great
-            percentage >= 0.6f -> R.string.guess_result_good
-            percentage >= 0.4f -> R.string.guess_result_ok
-            else -> R.string.guess_result_poor
-        }
-    )
-
     GradientBackground {
         Column(modifier = Modifier.fillMaxSize()) {
             GlassTopBar(title = stringResource(R.string.guess_result_title))
@@ -91,52 +81,23 @@ fun GameResultScreen(
                     .fillMaxSize()
                     .navigationBarsPadding()
             ) {
-                // Score card
+                // Score card - just the number
                 item {
                     GlassCard(
                         modifier = Modifier.fillMaxWidth(),
                         glowColor = scoreColor,
                         contentPadding = 24.dp
                     ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                        Box(
+                            contentAlignment = Alignment.Center,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            // Stars
-                            Row {
-                                val stars = when {
-                                    percentage >= 1f -> 3
-                                    percentage >= 0.7f -> 2
-                                    percentage >= 0.4f -> 1
-                                    else -> 0
-                                }
-                                repeat(3) { index ->
-                                    Icon(
-                                        imageVector = Icons.Default.Star,
-                                        contentDescription = null,
-                                        tint = if (index < stars) scoreColor else Color.White.copy(alpha = 0.15f),
-                                        modifier = Modifier.size(36.dp)
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
                             Text(
                                 text = "$score/$total",
                                 style = MaterialTheme.typography.displayLarge,
                                 color = scoreColor,
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 56.sp
-                            )
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Text(
-                                text = message,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color.White.copy(alpha = 0.8f),
-                                textAlign = TextAlign.Center
                             )
                         }
                     }
@@ -176,21 +137,13 @@ fun GameResultScreen(
                                 contentScale = ContentScale.Fit
                             )
                             Spacer(modifier = Modifier.width(12.dp))
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = result.pokemonName,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                if (!result.isCorrect) {
-                                    Text(
-                                        text = stringResource(R.string.guess_wrong_answer, result.pokemonName),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = Color.White.copy(alpha = 0.5f)
-                                    )
-                                }
-                            }
+                            Text(
+                                text = result.pokemonName,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(1f)
+                            )
                             Icon(
                                 imageVector = if (result.isCorrect) Icons.Default.Check else Icons.Default.Close,
                                 contentDescription = null,

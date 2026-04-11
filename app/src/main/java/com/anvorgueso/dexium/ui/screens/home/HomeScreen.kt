@@ -51,7 +51,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.border
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -313,20 +315,54 @@ fun HomeScreen(
                 }
             }
 
-            // FAB
-            FloatingActionButton(
-                onClick = { showFabMenu = !showFabMenu },
+            // Glass FAB
+            Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(20.dp)
-                    .navigationBarsPadding(),
-                containerColor = glass.accent,
-                contentColor = Color.White,
-                shape = CircleShape
+                    .navigationBarsPadding()
+                    .size(56.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                glass.accent.copy(alpha = 0.3f),
+                                glass.accent.copy(alpha = 0.1f)
+                            )
+                        )
+                    )
+                    .border(
+                        width = 1.dp,
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                glass.accent.copy(alpha = 0.6f),
+                                glass.accent.copy(alpha = 0.15f)
+                            )
+                        ),
+                        shape = CircleShape
+                    )
+                    .drawWithContent {
+                        drawContent()
+                        // Top highlight
+                        drawCircle(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.2f),
+                                    Color.Transparent
+                                ),
+                                startY = 0f,
+                                endY = size.height * 0.5f
+                            ),
+                            radius = size.width * 0.48f
+                        )
+                    }
+                    .clickable { showFabMenu = !showFabMenu },
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.SportsEsports,
                     contentDescription = "Games",
+                    tint = Color.White,
                     modifier = Modifier.size(26.dp)
                 )
             }

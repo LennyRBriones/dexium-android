@@ -129,19 +129,6 @@ fun PokemonCard(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(3.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                SmallTypeBadge(type = pokemon.typePrimary)
-                pokemon.typeSecondary?.let { SmallTypeBadge(type = it) }
-            }
         }
     }
-}
-
-@Composable
-private fun SmallTypeBadge(type: String) {
-    TypeSymbol(type = type, iconSize = 16.dp)
 }
