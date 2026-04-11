@@ -101,6 +101,9 @@ dependencies {
     // Splash Screen
     implementation(libs.splashscreen)
 
+    // Media3 ExoPlayer (for Pokemon cries)
+    implementation(libs.media3.exoplayer)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

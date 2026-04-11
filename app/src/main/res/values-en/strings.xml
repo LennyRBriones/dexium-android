@@ -80,6 +80,41 @@
     <string name="dialog_animated_confirm">Enable</string>
     <string name="dialog_cancel">Cancel</string>
 
+    <!-- Guess Game -->
+    <string name="guess_game">Guess Game</string>
+    <string name="guess_game_title">Guess the Pokémon</string>
+    <string name="guess_select_generation">Select a Generation</string>
+    <string name="guess_all_generations">All Generations</string>
+    <string name="guess_all_generations_desc">Pokémon from all regions</string>
+    <string name="guess_custom">Custom</string>
+    <string name="guess_custom_desc">Choose your generations</string>
+    <string name="guess_custom_title">Custom</string>
+    <string name="guess_custom_min">Select at least 2 generations</string>
+    <string name="guess_selected_count">%1$d selected</string>
+    <string name="guess_start_game">Start Game</string>
+    <string name="guess_round">Round %1$d/%2$d</string>
+    <string name="guess_score">Score: %1$d</string>
+    <string name="guess_play_cry">Play Cry</string>
+    <string name="guess_correct">Correct!</string>
+    <string name="guess_wrong">Wrong!</string>
+    <string name="guess_wrong_answer">It was %1$s</string>
+    <string name="guess_exit_title">Exit game?</string>
+    <string name="guess_exit_message">You will lose your current progress.</string>
+    <string name="guess_exit_confirm">Exit</string>
+    <string name="guess_exit_cancel">Continue</string>
+    <string name="guess_result_title">Results</string>
+    <string name="guess_result_perfect">Perfect! You\'re a Pokémon Master!</string>
+    <string name="guess_result_great">Excellent! Almost perfect!</string>
+    <string name="guess_result_good">Well done! Keep practicing!</string>
+    <string name="guess_result_ok">Not bad! You can improve!</string>
+    <string name="guess_result_poor">Keep trying! You can do it!</string>
+    <string name="guess_play_again">Play Again</string>
+    <string name="guess_back_home">Back to Home</string>
+    <string name="guess_loading">Preparing game…</string>
+    <string name="guess_no_data">Not enough data. Browse that generation first.</string>
+    <string name="guess_pokemon_count">%1$d Pokémon</string>
+    <string name="guess_region">Region: %1$s</string>
+
     <!-- Dex Categories -->
     <string name="dex_national">National Dex</string>
     <string name="dex_mega">Mega Dex</string>
