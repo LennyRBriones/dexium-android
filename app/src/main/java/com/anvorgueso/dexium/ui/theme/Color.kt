@@ -2,10 +2,28 @@ package com.anvorgueso.dexium.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val DeepNavy = Color(0xFF0A1628)
+val DarkNavy = Color(0xFF162544)
+val MidNavy = Color(0xFF1E3355)
+val LightNavy = Color(0xFF2A4470)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val GlassBlue = Color(0xFF4FC3F7)
+val GlassBlueSoft = Color(0xFF81D4FA)
+val GlassBlueDark = Color(0xFF0288D1)
+val GlassWhite = Color(0xFFE3F2FD)
+
+val GlassSurface = Color(0x14FFFFFF)
+val GlassSurfaceLight = Color(0x26FFFFFF)
+val GlassBorder = Color(0x33FFFFFF)
+val GlassBorderLight = Color(0x4DFFFFFF)
+
+val TextPrimary = Color(0xFFFFFFFF)
+val TextSecondary = Color(0xB3FFFFFF)
+val TextTertiary = Color(0x80FFFFFF)
+
+val GlowBlue = Color(0x4D4FC3F7)
+val GlowBlueSoft = Color(0x264FC3F7)
+
+val ErrorRed = Color(0xFFEF5350)
+val SuccessGreen = Color(0xFF66BB6A)
+val WarningAmber = Color(0xFFFFCA28)
