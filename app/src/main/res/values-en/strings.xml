@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">Dexium</string>
 
-    <!-- Splash -->
-    <string name="splash_subtitle">Your Ultimate Pokédex</string>
-
-    <!-- Onboarding -->
     <string name="onboarding_welcome">Welcome to Dexium</string>
     <string name="onboarding_choose">Choose how creatures are displayed</string>
     <string name="onboarding_animated_title">Animated 3D</string>
@@ -14,22 +10,18 @@
     <string name="onboarding_change_later">You can change this later in settings</string>
     <string name="onboarding_get_started">Get Started</string>
 
-    <!-- Home -->
     <string name="search_placeholder">Search…</string>
     <string name="loading_creatures">Loading…</string>
     <string name="filter_all">All</string>
     <string name="filter_other">Other</string>
-    <string name="refresh">Refresh</string>
     <string name="settings">Settings</string>
 
-    <!-- Empty / Error states -->
     <string name="error_no_connection">No Connection</string>
     <string name="error_something_wrong">Something went wrong</string>
     <string name="error_retry">Retry</string>
     <string name="empty_no_results">No Results</string>
     <string name="empty_no_results_for">No results found for \"%1$s\". Try a different name.</string>
 
-    <!-- Detail -->
     <string name="section_sprites">Sprites</string>
     <string name="section_evolution">Evolution Chain</string>
     <string name="section_stats">Base Stats</string>
@@ -48,10 +40,8 @@
     <string name="label_no_shiny">No shiny sprite available</string>
     <string name="loading_details">Loading details…</string>
 
-    <!-- About / Settings -->
     <string name="about_title">About</string>
     <string name="about_version">v1.0</string>
-    <string name="about_subtitle">Your Ultimate Pokédex Companion</string>
     <string name="settings_title">Settings</string>
     <string name="settings_animated_sprites">Animated 3D Sprites</string>
     <string name="settings_animated_on">Showing animated sprites</string>
@@ -68,7 +58,6 @@
     <string name="credits_powered_by">Powered by PokéAPI</string>
     <string name="disclaimer">This app is not affiliated with, endorsed, or sponsored by Nintendo, The Pokémon Company, or Game Freak. Pokémon and all related marks are trademarks of their respective owners. All data provided by PokéAPI.</string>
 
-    <!-- Dialogs -->
     <string name="dialog_download_title">Download All Data?</string>
     <string name="dialog_download_message">This will download data for all creatures. This may use a significant amount of mobile data.\n\nWe recommend doing this over Wi-Fi.</string>
     <string name="dialog_download_confirm">Download</string>
@@ -80,7 +69,30 @@
     <string name="dialog_animated_confirm">Enable</string>
     <string name="dialog_cancel">Cancel</string>
 
-    <!-- Dex Categories -->
+    <string name="guess_game">Guess Game</string>
+    <string name="guess_game_title">Guess Game</string>
+    <string name="guess_all_generations">All Generations</string>
+    <string name="guess_all_generations_desc">All regions</string>
+    <string name="guess_custom">Custom</string>
+    <string name="guess_custom_desc">Choose your generations</string>
+    <string name="guess_custom_title">Custom</string>
+    <string name="guess_custom_min">Select at least 2 generations</string>
+    <string name="guess_selected_count">%1$d selected</string>
+    <string name="guess_start_game">Start Game</string>
+    <string name="guess_round">Round %1$d/%2$d</string>
+    <string name="guess_score">Score: %1$d</string>
+    <string name="guess_play_cry">Play Cry</string>
+    <string name="guess_exit_title">Exit game?</string>
+    <string name="guess_exit_message">You will lose your current progress.</string>
+    <string name="guess_exit_confirm">Exit</string>
+    <string name="guess_exit_cancel">Continue</string>
+    <string name="guess_result_title">Results</string>
+    <string name="guess_play_again">Play Again</string>
+    <string name="guess_back_home">Back to Home</string>
+    <string name="guess_loading">Preparing game…</string>
+    <string name="guess_no_data">Not enough data. Browse that generation first.</string>
+    <string name="guess_pokemon_count">%1$d</string>
+
     <string name="dex_national">National Dex</string>
     <string name="dex_mega">Mega Dex</string>
     <string name="dex_gigantamax">Gigantamax Dex</string>

@@ -1,18 +1,12 @@
 package com.anvorgueso.dexium.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import coil.size.Size
 import com.anvorgueso.dexium.core.util.formatPokemonId
 import com.anvorgueso.dexium.domain.model.Pokemon
 import com.anvorgueso.dexium.ui.theme.PokemonTypeColors
@@ -129,19 +122,6 @@ fun PokemonCard(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(3.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                SmallTypeBadge(type = pokemon.typePrimary)
-                pokemon.typeSecondary?.let { SmallTypeBadge(type = it) }
-            }
         }
     }
-}
-
-@Composable
-private fun SmallTypeBadge(type: String) {
-    TypeSymbol(type = type, iconSize = 16.dp)
 }

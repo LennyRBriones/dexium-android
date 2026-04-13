@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.anvorgueso.dexium.ui.components.GradientBackground
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
-import com.anvorgueso.dexium.ui.theme.TextSecondary
 import kotlinx.coroutines.delay
 
 @Composable

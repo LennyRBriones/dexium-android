@@ -89,17 +89,14 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
-    implementation(libs.coil.svg)
     implementation(libs.coil.gif)
 
-    // Coroutines
     implementation(libs.coroutines.android)
 
-    // DataStore
     implementation(libs.datastore.preferences)
 
-    // Splash Screen
-    implementation(libs.splashscreen)
+
+    implementation(libs.media3.exoplayer)
 
     // Testing
     testImplementation(libs.junit)
