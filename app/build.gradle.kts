@@ -89,19 +89,13 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
-    implementation(libs.coil.svg)
     implementation(libs.coil.gif)
 
-    // Coroutines
     implementation(libs.coroutines.android)
 
-    // DataStore
     implementation(libs.datastore.preferences)
 
-    // Splash Screen
-    implementation(libs.splashscreen)
 
-    // Media3 ExoPlayer (for Pokemon cries)
     implementation(libs.media3.exoplayer)
 
     // Testing

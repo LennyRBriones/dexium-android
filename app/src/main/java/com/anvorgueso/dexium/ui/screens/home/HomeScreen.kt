@@ -36,7 +36,6 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -249,7 +248,7 @@ fun HomeScreen(
             }
         }
 
-            // FAB overlay menu backdrop
+
             if (showFabMenu) {
                 Box(
                     modifier = Modifier
@@ -262,7 +261,7 @@ fun HomeScreen(
                 )
             }
 
-            // FAB menu item
+
             AnimatedVisibility(
                 visible = showFabMenu,
                 modifier = Modifier
@@ -315,7 +314,7 @@ fun HomeScreen(
                 }
             }
 
-            // Glass FAB
+
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -343,7 +342,7 @@ fun HomeScreen(
                     )
                     .drawWithContent {
                         drawContent()
-                        // Top highlight
+
                         drawCircle(
                             brush = Brush.verticalGradient(
                                 colors = listOf(
@@ -366,6 +365,6 @@ fun HomeScreen(
                     modifier = Modifier.size(26.dp)
                 )
             }
-        } // Box
+        } 
     }
 }

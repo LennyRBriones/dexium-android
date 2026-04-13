@@ -53,17 +53,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// Generation accent colors
+
 private val genAccentColors = listOf(
-    Color(0xFFEF5350), // Gen 1 - Red
-    Color(0xFFFFD740), // Gen 2 - Gold
-    Color(0xFF66BB6A), // Gen 3 - Emerald
-    Color(0xFF42A5F5), // Gen 4 - Diamond
-    Color(0xFF78909C), // Gen 5 - Gray
-    Color(0xFFEC407A), // Gen 6 - Pink
-    Color(0xFFFF7043), // Gen 7 - Orange
-    Color(0xFF5C6BC0), // Gen 8 - Indigo
-    Color(0xFFAB47BC), // Gen 9 - Purple
+    Color(0xFFEF5350), 
+    Color(0xFFFFD740), 
+    Color(0xFF66BB6A), 
+    Color(0xFF42A5F5), 
+    Color(0xFF78909C), 
+    Color(0xFFEC407A), 
+    Color(0xFFFF7043), 
+    Color(0xFF5C6BC0), 
+    Color(0xFFAB47BC), 
 )
 
 @HiltViewModel
@@ -124,7 +124,7 @@ fun GenerationSelectScreen(
                     .fillMaxSize()
                     .navigationBarsPadding()
             ) {
-                // All Generations
+
                 item {
                     GlassCard(
                         modifier = Modifier
@@ -161,7 +161,7 @@ fun GenerationSelectScreen(
                     }
                 }
 
-                // Generation cards
+
                 itemsIndexed(generations) { index, generation ->
                     val accentColor = genAccentColors.getOrElse(index) { GlassBlueSoft }
                     GlassCard(
@@ -175,7 +175,7 @@ fun GenerationSelectScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            // Gen number badge
+
                             Box(
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier.size(40.dp)
@@ -214,7 +214,7 @@ fun GenerationSelectScreen(
                     }
                 }
 
-                // Custom
+
                 item {
                     GlassCard(
                         modifier = Modifier
@@ -251,7 +251,7 @@ fun GenerationSelectScreen(
                     }
                 }
 
-                // Bottom spacing
+
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }

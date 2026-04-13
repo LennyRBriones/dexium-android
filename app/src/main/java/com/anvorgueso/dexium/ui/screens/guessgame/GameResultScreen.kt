@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,7 +37,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -81,7 +79,7 @@ fun GameResultScreen(
                     .fillMaxSize()
                     .navigationBarsPadding()
             ) {
-                // Score card - just the number
+
                 item {
                     GlassCard(
                         modifier = Modifier.fillMaxWidth(),
@@ -103,7 +101,7 @@ fun GameResultScreen(
                     }
                 }
 
-                // Round results
+
                 items(roundResults) { result ->
                     val resultColor = if (result.isCorrect) SuccessGreen else ErrorRed
                     val shape = RoundedCornerShape(16.dp)
@@ -154,11 +152,11 @@ fun GameResultScreen(
                     }
                 }
 
-                // Action buttons
+
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Play Again
+
                     val playShape = RoundedCornerShape(20.dp)
                     Box(
                         modifier = Modifier
@@ -197,7 +195,7 @@ fun GameResultScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // Back to Home
+
                     val homeShape = RoundedCornerShape(20.dp)
                     Box(
                         modifier = Modifier

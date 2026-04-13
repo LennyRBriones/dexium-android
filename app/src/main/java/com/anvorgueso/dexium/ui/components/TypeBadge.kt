@@ -67,25 +67,3 @@ fun TypeBadge(
     }
 }
 
-@Composable
-fun TypeSymbol(
-    type: String,
-    modifier: Modifier = Modifier,
-    iconSize: Dp = 18.dp
-) {
-    val symbolUrl = PokemonTypeColors.getTypeSymbolUrl(type)
-
-    if (symbolUrl != null) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(symbolUrl)
-                .crossfade(true)
-                .build(),
-            contentDescription = "$type type",
-            contentScale = ContentScale.Fit,
-            modifier = modifier
-                .size(iconSize)
-                .clip(RoundedCornerShape(5.dp))
-        )
-    }
-}

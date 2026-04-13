@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.Color
 val DeepNavy = Color(0xFF0A1628)
 val DarkNavy = Color(0xFF162544)
 val MidNavy = Color(0xFF1E3355)
-val LightNavy = Color(0xFF2A4470)
 
 val GlassBlue = Color(0xFF4FC3F7)
 val GlassBlueSoft = Color(0xFF81D4FA)

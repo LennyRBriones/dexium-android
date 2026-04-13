@@ -62,16 +62,6 @@ object PokemonTypeColors {
         return typeColors[type] ?: typeColors["Normal"]!!
     }
 
-    fun getGradientColors(type: String): Pair<Color, Color> {
-        val base = getColor(type)
-        return Pair(base, base.copy(alpha = 0.6f))
-    }
-
-    fun getTypeIconUrl(type: String): String? {
-        val id = typeIds[type] ?: return null
-        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/$id.png"
-    }
-
     fun getTypeSymbolUrl(type: String): String? {
         val id = typeIds[type] ?: return null
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/small/$id.png"

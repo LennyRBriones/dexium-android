@@ -46,14 +46,11 @@ import com.anvorgueso.dexium.R
 import com.anvorgueso.dexium.core.util.Resource
 import com.anvorgueso.dexium.domain.model.Generation
 import com.anvorgueso.dexium.domain.repository.GenerationRepository
-import com.anvorgueso.dexium.ui.components.GlassCard
 import com.anvorgueso.dexium.ui.components.GlassTopBar
 import com.anvorgueso.dexium.ui.components.GradientBackground
 import com.anvorgueso.dexium.ui.components.LoadingIndicator
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
-import com.anvorgueso.dexium.ui.theme.GlassBlue
 import com.anvorgueso.dexium.ui.theme.GlassBlueSoft
-import com.anvorgueso.dexium.ui.theme.SuccessGreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -139,7 +136,7 @@ fun CustomGenerationSelectScreen(
                 return@GradientBackground
             }
 
-            // Selection info
+
             Text(
                 text = stringResource(R.string.guess_custom_min),
                 style = MaterialTheme.typography.bodyMedium,
@@ -197,7 +194,7 @@ fun CustomGenerationSelectScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            // Gen number
+
                             Box(
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier.size(40.dp)
@@ -248,7 +245,7 @@ fun CustomGenerationSelectScreen(
                 item { Spacer(modifier = Modifier.height(8.dp)) }
             }
 
-            // Start button
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

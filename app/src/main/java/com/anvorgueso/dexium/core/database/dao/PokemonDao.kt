@@ -25,14 +25,14 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon WHERE generationId = :generationId AND dexCategory = :category ORDER BY id ASC")
     suspend fun getByGenerationAndCategory(generationId: Int, category: String): List<PokemonEntity>
 
-    // Search within a dex category
+
     @Query("SELECT * FROM pokemon WHERE name LIKE '%' || :query || '%' AND dexCategory = :category ORDER BY id ASC")
     fun searchByNameAndCategory(query: String, category: String): Flow<List<PokemonEntity>>
 
     @Query("SELECT * FROM pokemon WHERE name LIKE '%' || :query || '%' AND dexCategory = :category AND generationId = :generationId ORDER BY id ASC")
     fun searchByNameCategoryAndGeneration(query: String, category: String, generationId: Int): Flow<List<PokemonEntity>>
 
-    // Forms Dex: filter by form region (null = all forms, "other" handled in repo)
+
     @Query("SELECT * FROM pokemon WHERE dexCategory = 'FORMS' AND (:formRegion IS NULL OR formRegion = :formRegion) ORDER BY id ASC")
     suspend fun getFormsByRegion(formRegion: String?): List<PokemonEntity>
 

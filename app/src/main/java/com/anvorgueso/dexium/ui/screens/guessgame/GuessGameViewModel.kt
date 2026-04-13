@@ -75,7 +75,7 @@ class GuessGameViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            // Ensure data is available
+
             val count = pokemonDao.getCountByCategory("NATIONAL")
             if (count < 50) {
                 try {
@@ -83,7 +83,7 @@ class GuessGameViewModel @Inject constructor(
                 } catch (_: Exception) {}
             }
 
-            // Get pokemon pool based on generation selection
+
             val generationIds = parseGenerationIds()
             pokemonPool = if (generationIds.isEmpty()) {
                 pokemonDao.getAllByCategory("NATIONAL")

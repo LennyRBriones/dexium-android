@@ -125,7 +125,7 @@ fun GuessGameScreen(
                 return@GradientBackground
             }
 
-            // Top bar with back, round indicator, and score
+
             GameTopBar(
                 currentRound = uiState.currentRound + 1,
                 totalRounds = uiState.totalRounds,
@@ -134,7 +134,7 @@ fun GuessGameScreen(
                 glass = glass
             )
 
-            // Progress bar
+
             val progress by animateFloatAsState(
                 targetValue = (uiState.currentRound + 1).toFloat() / uiState.totalRounds,
                 animationSpec = tween(300),
@@ -153,14 +153,14 @@ fun GuessGameScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Pokemon artwork
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                // Glow behind image
+
                 Box(
                     modifier = Modifier
                         .size(220.dp)
@@ -190,7 +190,7 @@ fun GuessGameScreen(
 
             Spacer(modifier = Modifier.weight(0.3f))
 
-            // Play cry button
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -228,7 +228,7 @@ fun GuessGameScreen(
                 }
             }
 
-            // 3 option buttons
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
