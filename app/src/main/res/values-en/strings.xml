@@ -70,9 +70,9 @@
     <string name="dialog_cancel">Cancel</string>
 
     <string name="guess_game">Guess Game</string>
-    <string name="guess_game_title">Guess the Pokémon</string>
+    <string name="guess_game_title">Guess Game</string>
     <string name="guess_all_generations">All Generations</string>
-    <string name="guess_all_generations_desc">Pokémon from all regions</string>
+    <string name="guess_all_generations_desc">All regions</string>
     <string name="guess_custom">Custom</string>
     <string name="guess_custom_desc">Choose your generations</string>
     <string name="guess_custom_title">Custom</string>
@@ -91,7 +91,7 @@
     <string name="guess_back_home">Back to Home</string>
     <string name="guess_loading">Preparing game…</string>
     <string name="guess_no_data">Not enough data. Browse that generation first.</string>
-    <string name="guess_pokemon_count">%1$d Pokémon</string>
+    <string name="guess_pokemon_count">%1$d</string>
 
     <string name="dex_national">National Dex</string>
     <string name="dex_mega">Mega Dex</string>

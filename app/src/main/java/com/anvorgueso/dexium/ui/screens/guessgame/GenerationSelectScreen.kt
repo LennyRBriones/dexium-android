@@ -151,11 +151,6 @@ fun GenerationSelectScreen(
                                     color = Color.White,
                                     fontWeight = FontWeight.Bold
                                 )
-                                Text(
-                                    text = stringResource(R.string.guess_all_generations_desc),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = Color.White.copy(alpha = 0.6f)
-                                )
                             }
                         }
                     }

@@ -69,10 +69,10 @@
     <string name="dialog_animated_confirm">Activar</string>
     <string name="dialog_cancel">Cancelar</string>
 
-    <string name="guess_game">Guess Game</string>
-    <string name="guess_game_title">Adivina el Pokémon</string>
+    <string name="guess_game">Juego Adivinador</string>
+    <string name="guess_game_title">Adivinador</string>
     <string name="guess_all_generations">Todas las Generaciones</string>
-    <string name="guess_all_generations_desc">Pokémon de todas las regiones</string>
+    <string name="guess_all_generations_desc">Todas las regiones</string>
     <string name="guess_custom">Personalizado</string>
     <string name="guess_custom_desc">Elige tus generaciones</string>
     <string name="guess_custom_title">Personalizado</string>
@@ -91,7 +91,7 @@
     <string name="guess_back_home">Volver al Inicio</string>
     <string name="guess_loading">Preparando juego…</string>
     <string name="guess_no_data">No hay datos suficientes. Navega por esa generación primero.</string>
-    <string name="guess_pokemon_count">%1$d Pokémon</string>
+    <string name="guess_pokemon_count">%1$d</string>
 
     <string name="dex_national">Dex Nacional</string>
     <string name="dex_mega">Mega Dex</string>
