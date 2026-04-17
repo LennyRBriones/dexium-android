@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.anvorgueso.dexium.ui.screens.about.AboutScreen
+import com.anvorgueso.dexium.ui.screens.aichat.AiChatScreen
 import com.anvorgueso.dexium.ui.screens.detail.DetailScreen
 import com.anvorgueso.dexium.ui.screens.guessgame.CustomGenerationSelectScreen
 import com.anvorgueso.dexium.ui.screens.guessgame.GameResultScreen
@@ -96,6 +97,9 @@ fun DexiumNavHost() {
                 },
                 onGuessGameClick = {
                     navController.navigate(Routes.GUESS_GENERATION_SELECT)
+                },
+                onAiChatClick = {
+                    navController.navigate(Routes.AI_CHAT)
                 }
             )
         }
@@ -115,6 +119,15 @@ fun DexiumNavHost() {
         composable(Routes.ABOUT) {
             AboutScreen(
                 onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.AI_CHAT) {
+            AiChatScreen(
+                onBackClick = { navController.popBackStack() },
+                onPokemonClick = { pokemonId ->
+                    navController.navigate(Routes.detail(pokemonId))
+                }
             )
         }
 

@@ -1,8 +1,10 @@
 package com.anvorgueso.dexium.core.di
 
+import com.anvorgueso.dexium.core.repository.AiChatRepositoryImpl
 import com.anvorgueso.dexium.core.repository.GenerationRepositoryImpl
 import com.anvorgueso.dexium.core.repository.PokemonRepositoryImpl
 import com.anvorgueso.dexium.core.repository.UserPreferencesRepositoryImpl
+import com.anvorgueso.dexium.domain.repository.AiChatRepository
 import com.anvorgueso.dexium.domain.repository.GenerationRepository
 import com.anvorgueso.dexium.domain.repository.PokemonRepository
 import com.anvorgueso.dexium.domain.repository.UserPreferencesRepository
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun bindUserPreferencesRepository(
         impl: UserPreferencesRepositoryImpl
     ): UserPreferencesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAiChatRepository(
+        impl: AiChatRepositoryImpl
+    ): AiChatRepository
 }

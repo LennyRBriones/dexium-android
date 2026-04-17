@@ -97,4 +97,18 @@
     <string name="dex_mega">Mega Dex</string>
     <string name="dex_gigantamax">Gigantamax Dex</string>
     <string name="dex_forms">Dex Formas</string>
+
+    <string name="ai_chat">Dex IA</string>
+    <string name="ai_chat_title">Dex IA</string>
+    <string name="ai_chat_welcome">¡Hola! Descríbeme una criatura y te ayudaré a identificarla.\n\nPor ejemplo: \"Tiene 4 patas, es rojo y es tipo fuego\"</string>
+    <string name="ai_chat_input_hint">Describe una criatura…</string>
+    <string name="ai_chat_send">Enviar</string>
+    <string name="ai_chat_thinking">Analizando…</string>
+    <string name="ai_chat_results">Podría ser:</string>
+    <string name="ai_chat_no_results">No encontré coincidencias con esa descripción. Intenta con más detalles.</string>
+    <string name="ai_chat_error">Error al procesar tu mensaje. Intenta de nuevo.</string>
+    <string name="ai_chat_no_api_key">La función de IA no está configurada. Contacta al desarrollador.</string>
+    <string name="ai_chat_rate_limit">Demasiadas consultas. Espera un momento antes de volver a intentar.</string>
+    <string name="ai_chat_no_internet">Necesitas conexión a internet para usar esta función.</string>
+    <string name="ai_chat_model_unavailable">El modelo de IA no está disponible. Actualiza la app.</string>
 </resources>

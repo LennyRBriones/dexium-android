@@ -19,6 +19,9 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon WHERE id = :id")
     suspend fun getById(id: Int): PokemonEntity?
 
+    @Query("SELECT * FROM pokemon WHERE LOWER(name) = LOWER(:name) AND dexCategory = 'NATIONAL' LIMIT 1")
+    suspend fun searchByExactName(name: String): PokemonEntity?
+
     @Query("SELECT * FROM pokemon WHERE dexCategory = :category ORDER BY id ASC")
     suspend fun getAllByCategory(category: String): List<PokemonEntity>
 

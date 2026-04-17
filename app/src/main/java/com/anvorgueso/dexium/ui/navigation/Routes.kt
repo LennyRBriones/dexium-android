@@ -6,9 +6,8 @@ object Routes {
     const val HOME = "home"
     const val DETAIL = "detail/{pokemonId}"
     const val ABOUT = "about"
+    const val AI_CHAT = "ai_chat"
 
-
-    const val GUESS_FLOW = "guess_flow"
     const val GUESS_GENERATION_SELECT = "guess/generation_select"
     const val GUESS_CUSTOM_SELECT = "guess/custom_select"
     const val GUESS_GAME = "guess/game/{generationIds}"
