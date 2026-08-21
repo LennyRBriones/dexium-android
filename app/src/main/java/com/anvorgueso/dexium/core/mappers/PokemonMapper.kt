@@ -53,7 +53,7 @@ object PokemonMapper {
                 ?: sprites.other?.home?.frontDefault,
             animatedSpriteUrl = sprites.other?.showdown?.frontDefault
                 ?: buildAnimatedSpriteUrl(id),
-            typePrimary = types.firstOrNull()?.type?.name?.capitalizeFirst() ?: "Unknown",
+            typePrimary = types.firstOrNull()?.type?.name?.capitalizeFirst() ?: Pokemon.UNKNOWN_TYPE,
             typeSecondary = types.getOrNull(1)?.type?.name?.capitalizeFirst(),
             generationId = generationId,
             dexCategory = category.name,
@@ -132,12 +132,21 @@ object PokemonMapper {
         )
     }
 
-    fun PokemonEntity.toDomainModel(useHdImages: Boolean): Pokemon {
+    /**
+     * [shiny] powers the Shiny Dex. The grid table has no shiny columns, but PokeAPI's shiny
+     * sprite paths are just the normal ones with a `shiny/` segment, so they are derived from
+     * the id instead of being cached — no schema change, no destructive migration.
+     */
+    fun PokemonEntity.toDomainModel(useHdImages: Boolean, shiny: Boolean = false): Pokemon {
         return Pokemon(
             id = id,
             name = name,
-            imageUrl = hdSpriteUrl ?: spriteUrl ?: "",
-            animatedImageUrl = if (useHdImages) animatedSpriteUrl else null,
+            imageUrl = if (shiny) buildShinyArtworkUrl(id) else hdSpriteUrl ?: spriteUrl ?: "",
+            animatedImageUrl = when {
+                !useHdImages -> null
+                shiny -> buildShinyAnimatedSpriteUrl(id)
+                else -> animatedSpriteUrl
+            },
             typePrimary = typePrimary,
             typeSecondary = typeSecondary
         )
@@ -158,6 +167,7 @@ object PokemonMapper {
                     pokemonId = it.pokemonId,
                     pokemonName = it.pokemonName.capitalizeFirst(),
                     imageUrl = buildSpriteUrl(it.pokemonId, useHdImages),
+                    shinyImageUrl = buildShinyArtworkUrl(it.pokemonId),
                     isBaby = it.isBaby,
                     minLevel = it.minLevel,
                     trigger = it.trigger
@@ -188,7 +198,12 @@ object PokemonMapper {
             habitat = habitat,
             isLegendary = isLegendary,
             isMythical = isMythical,
-            evolutionChain = evolution
+            evolutionChain = evolution,
+            // Ungated on purpose, unlike animatedImageUrl above: the detail screen's 3D toggle
+            // is an explicit user action, so it must work even when the sprite preference is
+            // set to artworks — otherwise flipping the switch would do nothing.
+            animated3dUrl = animatedSpriteUrl,
+            shinyAnimated3dUrl = shinyAnimatedSpriteUrl
         )
     }
 
@@ -207,4 +222,9 @@ object PokemonMapper {
     private fun buildShinyAnimatedSpriteUrl(pokemonId: Int): String {
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/$pokemonId.gif"
     }
+
+    private fun buildShinyArtworkUrl(pokemonId: Int): String {
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/$pokemonId.png"
+    }
+
 }

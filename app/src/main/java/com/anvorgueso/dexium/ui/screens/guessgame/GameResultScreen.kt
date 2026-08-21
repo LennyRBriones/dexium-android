@@ -54,6 +54,8 @@ import com.anvorgueso.dexium.ui.theme.WarningAmber
 fun GameResultScreen(
     score: Int,
     total: Int,
+    highScore: Int?,
+    isNewRecord: Boolean,
     roundResults: List<RoundResult>,
     onPlayAgain: () -> Unit,
     onBackToHome: () -> Unit
@@ -86,8 +88,8 @@ fun GameResultScreen(
                         glowColor = scoreColor,
                         contentPadding = 24.dp
                     ) {
-                        Box(
-                            contentAlignment = Alignment.Center,
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
@@ -97,6 +99,23 @@ fun GameResultScreen(
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 56.sp
                             )
+
+                            if (isNewRecord) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = stringResource(R.string.guess_new_record),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = WarningAmber,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            } else if (highScore != null) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = stringResource(R.string.guess_record, highScore, total),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = Color.White.copy(alpha = 0.6f)
+                                )
+                            }
                         }
                     }
                 }

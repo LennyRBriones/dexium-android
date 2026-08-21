@@ -32,10 +32,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -67,7 +68,8 @@ import com.anvorgueso.dexium.ui.components.EmptySearchState
 import com.anvorgueso.dexium.ui.components.ErrorState
 import com.anvorgueso.dexium.ui.components.GradientBackground
 import com.anvorgueso.dexium.ui.components.GlassTopBar
-import com.anvorgueso.dexium.ui.components.LoadingIndicator
+import com.anvorgueso.dexium.ui.components.GridFooterShimmer
+import com.anvorgueso.dexium.ui.components.PokemonGridShimmer
 import com.anvorgueso.dexium.ui.components.PokemonCard
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
 import androidx.compose.ui.res.stringResource
@@ -75,9 +77,11 @@ import com.anvorgueso.dexium.R
 
 @Composable
 fun HomeScreen(
-    onPokemonClick: (Int) -> Unit,
+    onPokemonClick: (Int, Boolean) -> Unit,
     onAboutClick: () -> Unit,
     onGuessGameClick: () -> Unit = {},
+    onAiChatClick: () -> Unit = {},
+    onTeamBuilderClick: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -162,7 +166,7 @@ fun HomeScreen(
                         )
                     }
                 }
-            } else if (uiState.selectedDexCategory == DexCategory.NATIONAL && uiState.generations.isNotEmpty()) {
+            } else if (uiState.selectedDexCategory.isPaginated && uiState.generations.isNotEmpty()) {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -187,7 +191,7 @@ fun HomeScreen(
 
             when {
                 uiState.isLoading && uiState.pokemonList.isEmpty() -> {
-                    LoadingIndicator(message = stringResource(R.string.loading_creatures))
+                    PokemonGridShimmer()
                 }
                 uiState.error != null && uiState.pokemonList.isEmpty() -> {
                     ErrorState(
@@ -224,23 +228,20 @@ fun HomeScreen(
                         ) { pokemon ->
                             PokemonCard(
                                 pokemon = pokemon,
-                                onClick = { onPokemonClick(pokemon.id) }
+                                onClick = {
+                                    onPokemonClick(
+                                        pokemon.id,
+                                        uiState.selectedDexCategory.isShiny
+                                    )
+                                }
                             )
                         }
 
                         if (uiState.isLoadingMore) {
                             item(span = { GridItemSpan(3) }) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator(
-                                        color = glass.accent,
-                                        strokeWidth = 2.dp
-                                    )
-                                }
+                                GridFooterShimmer(
+                                    modifier = Modifier.padding(horizontal = 8.dp)
+                                )
                             }
                         }
                     }
@@ -278,39 +279,40 @@ fun HomeScreen(
                 ) + fadeOut(tween(150))
             ) {
                 val menuShape = RoundedCornerShape(16.dp)
-                Box(
-                    modifier = Modifier
-                        .clip(menuShape)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.White.copy(alpha = 0.12f),
-                                    Color.White.copy(alpha = 0.06f)
-                                )
-                            ),
-                            menuShape
-                        )
-                        .clickable {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    FabMenuItem(
+                        icon = Icons.Default.AutoAwesome,
+                        label = stringResource(R.string.ai_chat),
+                        accent = glass.accent,
+                        shape = menuShape,
+                        onClick = {
+                            showFabMenu = false
+                            onAiChatClick()
+                        }
+                    )
+                    FabMenuItem(
+                        icon = Icons.Default.Groups,
+                        label = stringResource(R.string.team_builder),
+                        accent = glass.accent,
+                        shape = menuShape,
+                        onClick = {
+                            showFabMenu = false
+                            onTeamBuilderClick()
+                        }
+                    )
+                    FabMenuItem(
+                        icon = Icons.Default.SportsEsports,
+                        label = stringResource(R.string.guess_game),
+                        accent = glass.accent,
+                        shape = menuShape,
+                        onClick = {
                             showFabMenu = false
                             onGuessGameClick()
                         }
-                        .padding(horizontal = 20.dp, vertical = 14.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.SportsEsports,
-                            contentDescription = null,
-                            tint = glass.accent,
-                            modifier = Modifier.size(22.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = stringResource(R.string.guess_game),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = Color.White,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+                    )
                 }
             }
 
@@ -365,6 +367,52 @@ fun HomeScreen(
                     modifier = Modifier.size(26.dp)
                 )
             }
-        } 
+        }
+    }
+}
+
+@Composable
+private fun FabMenuItem(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    accent: Color,
+    shape: androidx.compose.ui.graphics.Shape,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .clip(shape)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.White.copy(alpha = 0.12f),
+                        Color.White.copy(alpha = 0.06f)
+                    )
+                ),
+                shape
+            )
+            .border(
+                1.dp,
+                Color.White.copy(alpha = 0.15f),
+                shape
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 14.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = accent,
+                modifier = Modifier.size(22.dp)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.titleSmall,
+                color = Color.White,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }

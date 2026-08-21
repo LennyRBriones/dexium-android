@@ -57,7 +57,7 @@ import coil.request.ImageRequest
 import com.anvorgueso.dexium.R
 import com.anvorgueso.dexium.ui.components.GlassCard
 import com.anvorgueso.dexium.ui.components.GradientBackground
-import com.anvorgueso.dexium.ui.components.LoadingIndicator
+import com.anvorgueso.dexium.ui.components.GuessGameShimmer
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
 import com.anvorgueso.dexium.ui.theme.ErrorRed
 import com.anvorgueso.dexium.ui.theme.SuccessGreen
@@ -106,7 +106,7 @@ fun GuessGameScreen(
                 .navigationBarsPadding()
         ) {
             if (uiState.isLoading) {
-                LoadingIndicator(message = stringResource(R.string.guess_loading))
+                GuessGameShimmer()
                 return@GradientBackground
             }
 

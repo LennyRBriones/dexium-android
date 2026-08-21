@@ -1,10 +1,16 @@
 package com.anvorgueso.dexium.core.di
 
+import com.anvorgueso.dexium.core.repository.AiChatRepositoryImpl
 import com.anvorgueso.dexium.core.repository.GenerationRepositoryImpl
+import com.anvorgueso.dexium.core.repository.HighScoreRepositoryImpl
 import com.anvorgueso.dexium.core.repository.PokemonRepositoryImpl
+import com.anvorgueso.dexium.core.repository.TeamRepositoryImpl
 import com.anvorgueso.dexium.core.repository.UserPreferencesRepositoryImpl
+import com.anvorgueso.dexium.domain.repository.AiChatRepository
 import com.anvorgueso.dexium.domain.repository.GenerationRepository
+import com.anvorgueso.dexium.domain.repository.HighScoreRepository
 import com.anvorgueso.dexium.domain.repository.PokemonRepository
+import com.anvorgueso.dexium.domain.repository.TeamRepository
 import com.anvorgueso.dexium.domain.repository.UserPreferencesRepository
 import dagger.Binds
 import dagger.Module
@@ -33,4 +39,22 @@ abstract class RepositoryModule {
     abstract fun bindUserPreferencesRepository(
         impl: UserPreferencesRepositoryImpl
     ): UserPreferencesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAiChatRepository(
+        impl: AiChatRepositoryImpl
+    ): AiChatRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTeamRepository(
+        impl: TeamRepositoryImpl
+    ): TeamRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHighScoreRepository(
+        impl: HighScoreRepositoryImpl
+    ): HighScoreRepository
 }

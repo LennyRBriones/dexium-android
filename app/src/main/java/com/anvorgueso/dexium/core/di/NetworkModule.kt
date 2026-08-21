@@ -10,6 +10,10 @@ import com.anvorgueso.dexium.core.network.api.PokemonSpeciesApiService
 import com.anvorgueso.dexium.core.network.api.RegionApiService
 import com.anvorgueso.dexium.core.network.api.TypeApiService
 import com.anvorgueso.dexium.core.network.interceptor.CacheInterceptor
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.GenerationConfig
+import com.google.ai.client.generativeai.type.content
+import com.google.ai.client.generativeai.type.generationConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -111,5 +115,77 @@ object NetworkModule {
     @Singleton
     fun provideTypeApiService(retrofit: Retrofit): TypeApiService {
         return retrofit.create(TypeApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @PokemonIdentifierModel
+    fun provideGenerativeModel(): GenerativeModel {
+        val config: GenerationConfig = generationConfig {
+            responseMimeType = "application/json"
+            temperature = 0.4f
+        }
+
+        return GenerativeModel(
+            modelName = "gemini-2.5-flash",
+            apiKey = BuildConfig.GEMINI_API_KEY,
+            generationConfig = config,
+            systemInstruction = content {
+                text(
+                    """
+                    You are a Pokemon expert. The user will describe characteristics of a Pokemon (in any language) and you must identify which Pokemon match that description.
+
+                    STRICT RULES:
+                    1. Respond ONLY with a JSON array of Pokemon names in English, lowercase.
+                    2. Maximum 10 results, ordered from most likely to least likely.
+                    3. Consider: type, color, number of legs, size, generation, abilities, appearance, region.
+                    4. If unsure, include several possible options.
+                    5. Use the base species name only (no forms like "-mega", "-alola"). For example "charizard", not "charizard-mega-x".
+                    6. Do NOT include any extra text. ONLY the JSON array.
+
+                    Example response: ["arcanine","flareon","entei","heatmor"]
+                    """.trimIndent()
+                )
+            }
+        )
+    }
+
+    /**
+     * Separate model for team analysis: no JSON response mime type, since this one answers in
+     * prose, and a higher temperature because the output is advice rather than a lookup.
+     */
+    @Provides
+    @Singleton
+    @TeamAdvisorModel
+    fun provideTeamAdvisorModel(): GenerativeModel {
+        val config: GenerationConfig = generationConfig {
+            temperature = 0.7f
+        }
+
+        return GenerativeModel(
+            modelName = "gemini-2.5-flash",
+            apiKey = BuildConfig.GEMINI_API_KEY,
+            generationConfig = config,
+            systemInstruction = content {
+                text(
+                    """
+                    You are a competitive Pokemon team-building coach. The user gives you a team
+                    of up to six Pokemon with their types, plus a precomputed defensive summary
+                    of which attacking types the team is collectively weak to.
+
+                    RULES:
+                    1. Reply in the language named by the "Language:" line of the prompt. Use
+                       that language for everything, including Pokemon type names.
+                    2. Plain text only. No markdown, no asterisks, no headings, no code blocks.
+                    3. Keep it under 180 words.
+                    4. Structure the answer as three short labelled paragraphs, in this order:
+                       the team's biggest defensive hole, the single weakest member and why,
+                       and one concrete swap suggestion naming a replacement Pokemon.
+                    5. Base the analysis on the types given. Do not invent members.
+                    6. Be specific and practical. No filler and no disclaimers.
+                    """.trimIndent()
+                )
+            }
+        )
     }
 }

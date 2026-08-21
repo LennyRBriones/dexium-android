@@ -48,7 +48,7 @@ import com.anvorgueso.dexium.domain.model.Generation
 import com.anvorgueso.dexium.domain.repository.GenerationRepository
 import com.anvorgueso.dexium.ui.components.GlassTopBar
 import com.anvorgueso.dexium.ui.components.GradientBackground
-import com.anvorgueso.dexium.ui.components.LoadingIndicator
+import com.anvorgueso.dexium.ui.components.CardListShimmer
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
 import com.anvorgueso.dexium.ui.theme.GlassBlueSoft
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -132,7 +132,7 @@ fun CustomGenerationSelectScreen(
             )
 
             if (uiState.isLoading) {
-                LoadingIndicator(message = stringResource(R.string.guess_loading))
+                CardListShimmer(rowCount = 7)
                 return@GradientBackground
             }
 

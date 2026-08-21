@@ -1,5 +1,6 @@
 package com.anvorgueso.dexium.core.network.api
 
+import com.anvorgueso.dexium.core.network.dto.LocationAreaEncounterDto
 import com.anvorgueso.dexium.core.network.dto.PaginatedResponse
 import com.anvorgueso.dexium.core.network.dto.PokemonDetailDto
 import retrofit2.http.GET
@@ -23,4 +24,9 @@ interface PokemonApiService {
     suspend fun getPokemonByName(
         @Path("name") name: String
     ): PokemonDetailDto
+
+    @GET("pokemon/{id}/encounters")
+    suspend fun getPokemonEncounters(
+        @Path("id") id: Int
+    ): List<LocationAreaEncounterDto>
 }
