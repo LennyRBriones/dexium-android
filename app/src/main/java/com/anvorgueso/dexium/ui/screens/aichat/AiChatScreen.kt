@@ -58,6 +58,7 @@ import com.anvorgueso.dexium.domain.model.ChatMessage
 import com.anvorgueso.dexium.domain.model.Pokemon
 import com.anvorgueso.dexium.ui.components.GlassTopBar
 import com.anvorgueso.dexium.ui.components.GradientBackground
+import com.anvorgueso.dexium.ui.components.ChatBubbleShimmer
 import com.anvorgueso.dexium.ui.components.PokemonCard
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
 import com.anvorgueso.dexium.ui.theme.TextSecondary
@@ -174,7 +175,7 @@ private fun ChatBubble(
                 .padding(horizontal = 14.dp, vertical = 10.dp)
         ) {
             when {
-                message.isLoading -> TypingIndicator(glass)
+                message.isLoading -> ChatBubbleShimmer()
                 message.isError && message.pokemonResults.isEmpty() -> ErrorContent(message.content)
                 message.pokemonResults.isNotEmpty() -> ResultsHeader()
                 else -> Text(
