@@ -34,6 +34,8 @@
     <string name="label_hidden">Hidden</string>
     <string name="label_legendary">Legendary</string>
     <string name="label_mythical">Mythical</string>
+    <string name="toggle_show_3d">3D Model</string>
+    <string name="toggle_show_3d_desc">Animated sprite in the hero</string>
     <string name="toggle_show_sprite">Show Sprite</string>
     <string name="toggle_show_shiny">Show Shiny Sprite</string>
     <string name="label_shiny">Shiny</string>
@@ -94,6 +96,7 @@
     <string name="guess_pokemon_count">%1$d</string>
 
     <string name="dex_national">National Dex</string>
+    <string name="dex_shiny">Shiny Dex</string>
     <string name="dex_mega">Mega Dex</string>
     <string name="dex_gigantamax">Gigantamax Dex</string>
     <string name="dex_forms">Forms Dex</string>
@@ -111,4 +114,56 @@
     <string name="ai_chat_rate_limit">Too many requests. Wait a moment before trying again.</string>
     <string name="ai_chat_no_internet">You need an internet connection to use this feature.</string>
     <string name="ai_chat_model_unavailable">The AI model is unavailable. Please update the app.</string>
+
+    <string name="detail_play_cry">Play cry</string>
+    <string name="section_locations">Where to find it</string>
+    <string name="locations_loading">Finding locations…</string>
+    <string name="locations_empty">PokéAPI has no location data for this creature.</string>
+    <string name="locations_empty_hint">Scarlet and Violet data is not available yet.</string>
+    <string name="locations_no_internet">You need a connection to see locations.</string>
+    <string name="locations_error">Couldn\'t load locations.</string>
+    <string name="locations_level_range">Lv. %1$d–%2$d</string>
+    <string name="locations_level_single">Lv. %1$d</string>
+    <string name="locations_chance">%1$d%%</string>
+    <string name="locations_count">%1$d locations</string>
+    <string name="locations_count_one">1 location</string>
+
+    <string name="section_weaknesses">Weaknesses and resistances</string>
+    <string name="weak_to">Weak to</string>
+    <string name="resists">Resists</string>
+    <string name="immune_to">Immune to</string>
+
+    <string name="team_builder">Teams</string>
+    <string name="team_list_title">My Teams</string>
+    <string name="team_list_empty">No teams yet. Create your first one.</string>
+    <string name="team_create">Create Team</string>
+    <string name="team_builder_title">New Team</string>
+    <string name="team_name_hint">Team name</string>
+    <string name="team_members_count">%1$d/%2$d</string>
+    <string name="team_search_hint">Search creature…</string>
+    <string name="team_save">Save Team</string>
+    <string name="team_full">Team is full</string>
+    <string name="team_needs_member">Add at least one creature</string>
+    <string name="team_needs_name">Give your team a name</string>
+    <string name="team_detail_title">Team</string>
+    <string name="team_delete">Delete team</string>
+    <string name="team_delete_title">Delete this team?</string>
+    <string name="team_delete_message">This cannot be undone.</string>
+    <string name="team_threats">What hits your team hard?</string>
+    <string name="team_no_threats">No attacking type hits your team hard.</string>
+    <string name="team_ai_button">Ask Gemini</string>
+    <string name="team_ai_again">Ask again</string>
+    <string name="team_ai_title">Recommendations</string>
+    <string name="team_ai_error">Couldn\'t get a recommendation.</string>
+    <string name="team_ai_empty_team">Add creatures to your team first.</string>
+    <string name="team_edit">Edit team</string>
+    <string name="team_edit_title">Edit Team</string>
+    <string name="team_threats_explain">Under each type are the members that take the extra damage when it attacks.</string>
+    <string name="team_no_answer">No one on your team can take it</string>
+    <string name="team_resist_n">%1$d can take it</string>
+    <string name="team_resist_one">1 can take it</string>
+    <string name="guess_new_record">New record!</string>
+    <string name="guess_record">Record: %1$d/%2$d</string>
+    <string name="guess_record_short">Record %1$d</string>
+    <string name="guess_no_record">No record yet</string>
 </resources>

@@ -34,6 +34,8 @@
     <string name="label_hidden">Oculta</string>
     <string name="label_legendary">Legendario</string>
     <string name="label_mythical">Mítico</string>
+    <string name="toggle_show_3d">Modelo 3D</string>
+    <string name="toggle_show_3d_desc">Sprite animado en el hero</string>
     <string name="toggle_show_sprite">Mostrar Sprite</string>
     <string name="toggle_show_shiny">Mostrar Sprite Shiny</string>
     <string name="label_shiny">Shiny</string>
@@ -94,6 +96,7 @@
     <string name="guess_pokemon_count">%1$d</string>
 
     <string name="dex_national">Dex Nacional</string>
+    <string name="dex_shiny">Dex Shiny</string>
     <string name="dex_mega">Mega Dex</string>
     <string name="dex_gigantamax">Gigantamax Dex</string>
     <string name="dex_forms">Dex Formas</string>
@@ -111,4 +114,56 @@
     <string name="ai_chat_rate_limit">Demasiadas consultas. Espera un momento antes de volver a intentar.</string>
     <string name="ai_chat_no_internet">Necesitas conexión a internet para usar esta función.</string>
     <string name="ai_chat_model_unavailable">El modelo de IA no está disponible. Actualiza la app.</string>
+
+    <string name="detail_play_cry">Escuchar sonido</string>
+    <string name="section_locations">¿Dónde encontrarlo?</string>
+    <string name="locations_loading">Buscando ubicaciones…</string>
+    <string name="locations_empty">PokéAPI no tiene datos de ubicación para esta criatura.</string>
+    <string name="locations_empty_hint">Los datos de Escarlata y Púrpura aún no están disponibles.</string>
+    <string name="locations_no_internet">Necesitas conexión para ver las ubicaciones.</string>
+    <string name="locations_error">No se pudieron cargar las ubicaciones.</string>
+    <string name="locations_level_range">Nv. %1$d–%2$d</string>
+    <string name="locations_level_single">Nv. %1$d</string>
+    <string name="locations_chance">%1$d%%</string>
+    <string name="locations_count">%1$d ubicaciones</string>
+    <string name="locations_count_one">1 ubicación</string>
+
+    <string name="section_weaknesses">Debilidades y resistencias</string>
+    <string name="weak_to">Débil a</string>
+    <string name="resists">Resiste</string>
+    <string name="immune_to">Inmune a</string>
+
+    <string name="team_builder">Equipos</string>
+    <string name="team_list_title">Mis Equipos</string>
+    <string name="team_list_empty">Aún no tienes equipos. Crea el primero.</string>
+    <string name="team_create">Crear Equipo</string>
+    <string name="team_builder_title">Nuevo Equipo</string>
+    <string name="team_name_hint">Nombre del equipo</string>
+    <string name="team_members_count">%1$d/%2$d</string>
+    <string name="team_search_hint">Buscar criatura…</string>
+    <string name="team_save">Guardar Equipo</string>
+    <string name="team_full">Equipo completo</string>
+    <string name="team_needs_member">Agrega al menos una criatura</string>
+    <string name="team_needs_name">Ponle un nombre a tu equipo</string>
+    <string name="team_detail_title">Equipo</string>
+    <string name="team_delete">Eliminar equipo</string>
+    <string name="team_delete_title">¿Eliminar este equipo?</string>
+    <string name="team_delete_message">Esta acción no se puede deshacer.</string>
+    <string name="team_threats">¿Qué le pega fuerte a tu equipo?</string>
+    <string name="team_no_threats">Ningún tipo le pega fuerte a tu equipo.</string>
+    <string name="team_ai_button">Consultar a Gemini</string>
+    <string name="team_ai_again">Consultar de nuevo</string>
+    <string name="team_ai_title">Recomendaciones</string>
+    <string name="team_ai_error">No se pudo obtener la recomendación.</string>
+    <string name="team_ai_empty_team">Agrega criaturas a tu equipo primero.</string>
+    <string name="team_edit">Editar equipo</string>
+    <string name="team_edit_title">Editar Equipo</string>
+    <string name="team_threats_explain">Debajo de cada tipo están los miembros que reciben el daño extra si te atacan con él.</string>
+    <string name="team_no_answer">Nadie de tu equipo lo aguanta</string>
+    <string name="team_resist_n">%1$d lo aguantan</string>
+    <string name="team_resist_one">1 lo aguanta</string>
+    <string name="guess_new_record">¡Nuevo récord!</string>
+    <string name="guess_record">Récord: %1$d/%2$d</string>
+    <string name="guess_record_short">Récord %1$d</string>
+    <string name="guess_no_record">Sin récord</string>
 </resources>
