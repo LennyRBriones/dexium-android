@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anvorgueso.dexium.core.audio.CryPlayer
+import com.anvorgueso.dexium.core.util.AppLanguage
 import com.anvorgueso.dexium.core.util.Resource
 import com.anvorgueso.dexium.domain.model.GameEncounters
 import com.anvorgueso.dexium.domain.model.PokemonDetail
@@ -21,6 +22,7 @@ data class DetailUiState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val useImperialUnits: Boolean = false,
+    val languageCode: String = AppLanguage.DEFAULT.code,
     /** Set when the user arrived from the Shiny Dex, so the sprites here match the card. */
     val isShiny: Boolean = false,
     val isPlayingCry: Boolean = false,
@@ -57,7 +59,12 @@ class DetailViewModel @Inject constructor(
     private fun observePreferences() {
         viewModelScope.launch {
             userPreferencesRepository.userPreferences.collect { prefs ->
-                _uiState.update { it.copy(useImperialUnits = prefs.useImperialUnits) }
+                _uiState.update {
+                    it.copy(
+                        useImperialUnits = prefs.useImperialUnits,
+                        languageCode = prefs.language.code
+                    )
+                }
             }
         }
     }

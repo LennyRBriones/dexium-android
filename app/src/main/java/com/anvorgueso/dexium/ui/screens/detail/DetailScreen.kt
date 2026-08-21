@@ -43,7 +43,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -630,7 +629,7 @@ private fun DetailContent(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    val locale = LocalConfiguration.current.locales[0].language
+                    val locale = uiState.languageCode
                     // pokemon.types is already localized, so the chart canonicalizes internally.
                     val weak = TypeChart.weaknesses(pokemon.types)
                     val resist = TypeChart.resistances(pokemon.types)

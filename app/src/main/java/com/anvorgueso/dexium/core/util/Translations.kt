@@ -182,18 +182,20 @@ object Translations {
         )
     )
 
-    // Reverse of every typeNames table, so a translated name can be resolved back to the
-    // canonical English key. Needed because PokemonDetailEntity stores type names already
-    // translated, so on a Spanish device the detail screen holds "Fuego", not "Fire".
-    private val canonicalTypes: Map<String, String> =
-        typeNames.values.flatMap { it.entries }.associate { (english, translated) ->
-            translated.lowercase() to english
+    // Every localized spelling mapped back to the canonical English key. Needed because
+    // PokemonDetailEntity stores type names already translated, so on a Japanese device the
+    // detail screen holds "ほのお", not "Fire", and the type chart is keyed in English.
+    private val canonicalTypes: Map<String, String> = buildMap {
+        LocalizedTypeNames.allSpellings().forEach { (spelling, key) -> put(spelling.lowercase(), key) }
+        // Legacy Spanish spellings that predate the generated table, so details cached by an
+        // older build still resolve instead of silently reading as neutral.
+        typeNames.values.flatMap { it.entries }.forEach { (english, translated) ->
+            put(translated.lowercase(), english)
         }
-
-    fun translateType(type: String, locale: String): String {
-        if (locale == "en") return type
-        return typeNames[locale]?.get(type) ?: type
     }
+
+    fun translateType(type: String, locale: String): String =
+        LocalizedTypeNames.of(canonicalType(type), locale)
 
     /** Resolves a type name in any supported language to its canonical English key. */
     fun canonicalType(type: String): String =

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.anvorgueso.dexium.ui.components.LanguageSelector
 import com.anvorgueso.dexium.ui.components.GlassCard
 import com.anvorgueso.dexium.ui.components.GlassTopBar
 import com.anvorgueso.dexium.ui.components.GradientBackground
@@ -228,6 +230,40 @@ fun AboutScreen(
                                     uncheckedThumbColor = Color.White,
                                     uncheckedTrackColor = glass.surface
                                 )
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = stringResource(R.string.settings_language),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Color.White
+                                )
+                                Text(
+                                    text = if (uiState.isFollowingDeviceLanguage) {
+                                        stringResource(R.string.settings_language_device)
+                                    } else {
+                                        stringResource(R.string.settings_language_manual)
+                                    },
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = TextTertiary
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            LanguageSelector(
+                                selected = uiState.language,
+                                isFollowingDevice = uiState.isFollowingDeviceLanguage,
+                                onLanguageSelected = viewModel::setLanguage,
+                                followDeviceLabel = stringResource(R.string.settings_language_follow)
                             )
                         }
                     }

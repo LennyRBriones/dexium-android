@@ -166,4 +166,8 @@
     <string name="guess_record">Récord: %1$d/%2$d</string>
     <string name="guess_record_short">Récord %1$d</string>
     <string name="guess_no_record">Sin récord</string>
+    <string name="settings_language">Idioma del contenido</string>
+    <string name="settings_language_device">Siguiendo el idioma del dispositivo</string>
+    <string name="settings_language_manual">Elegido manualmente</string>
+    <string name="settings_language_follow">Idioma del dispositivo</string>
 </resources>

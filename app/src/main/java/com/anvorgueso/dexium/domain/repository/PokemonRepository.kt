@@ -23,6 +23,12 @@ interface PokemonRepository {
     suspend fun getPokemonEncounters(id: Int): Resource<List<GameEncounters>>
     suspend fun syncAllPokemon(onProgress: (Int, Int) -> Unit = { _, _ -> })
     suspend fun refreshPokemonData()
+
+    /**
+     * Drops cached details. Needed when the language changes: descriptions, genera, type and
+     * ability names are stored already translated, so old rows would keep the old language.
+     */
+    suspend fun clearDetailCache()
     suspend fun getLocalPokemonCount(): Int
     suspend fun getTotalPokemonCount(): Int
 }

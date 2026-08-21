@@ -8,4 +8,7 @@ interface UserPreferencesRepository {
     suspend fun setOnboardingComplete(complete: Boolean)
     suspend fun setUseHdImages(useHd: Boolean)
     suspend fun setUseImperialUnits(useImperial: Boolean)
+
+    /** Pass null to go back to following the device language. */
+    suspend fun setLanguage(code: String?)
 }

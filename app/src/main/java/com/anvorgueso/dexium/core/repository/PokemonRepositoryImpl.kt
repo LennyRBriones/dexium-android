@@ -151,7 +151,7 @@ class PokemonRepositoryImpl @Inject constructor(
                     emptyList()
                 }
 
-                val deviceLocale = java.util.Locale.getDefault().language
+                val deviceLocale = currentLanguageCode()
 
                 val translatedAbilities = if (deviceLocale != "en") {
                     coroutineScope {
@@ -388,7 +388,7 @@ class PokemonRepositoryImpl @Inject constructor(
     // and serves it for 7 days while offline (see CacheInterceptor), and a new Room column
     // would trip fallbackToDestructiveMigration and wipe every installed user's cache.
     override suspend fun getPokemonEncounters(id: Int): Resource<List<GameEncounters>> {
-        val locale = java.util.Locale.getDefault().language
+        val locale = currentLanguageCode()
         return try {
             Resource.Success(pokemonApi.getPokemonEncounters(id).toGameEncounters(locale))
         } catch (e: Exception) {
@@ -437,6 +437,14 @@ class PokemonRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
             }
         }
+    }
+
+    /** The user's chosen PokeAPI language, or the device's when they have not chosen. */
+    private suspend fun currentLanguageCode(): String =
+        userPreferencesRepository.userPreferences.first().language.code
+
+    override suspend fun clearDetailCache() {
+        pokemonDetailDao.deleteAll()
     }
 
     override suspend fun refreshPokemonData() {
