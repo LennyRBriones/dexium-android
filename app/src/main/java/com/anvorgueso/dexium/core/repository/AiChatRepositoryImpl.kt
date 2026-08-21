@@ -1,6 +1,7 @@
 package com.anvorgueso.dexium.core.repository
 
 import com.anvorgueso.dexium.core.database.dao.PokemonDao
+import com.anvorgueso.dexium.core.di.PokemonIdentifierModel
 import com.anvorgueso.dexium.core.mappers.PokemonMapper.toDomainModel
 import com.anvorgueso.dexium.core.util.NetworkConnectivityHelper
 import com.anvorgueso.dexium.core.util.Resource
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AiChatRepositoryImpl @Inject constructor(
-    private val generativeModel: GenerativeModel,
+    @PokemonIdentifierModel private val generativeModel: GenerativeModel,
     private val pokemonDao: PokemonDao,
     private val networkHelper: NetworkConnectivityHelper,
     private val userPreferencesRepository: UserPreferencesRepository

@@ -119,6 +119,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @PokemonIdentifierModel
     fun provideGenerativeModel(): GenerativeModel {
         val config: GenerationConfig = generationConfig {
             responseMimeType = "application/json"
@@ -143,6 +144,45 @@ object NetworkModule {
                     6. Do NOT include any extra text. ONLY the JSON array.
 
                     Example response: ["arcanine","flareon","entei","heatmor"]
+                    """.trimIndent()
+                )
+            }
+        )
+    }
+
+    /**
+     * Separate model for team analysis: no JSON response mime type, since this one answers in
+     * prose, and a higher temperature because the output is advice rather than a lookup.
+     */
+    @Provides
+    @Singleton
+    @TeamAdvisorModel
+    fun provideTeamAdvisorModel(): GenerativeModel {
+        val config: GenerationConfig = generationConfig {
+            temperature = 0.7f
+        }
+
+        return GenerativeModel(
+            modelName = "gemini-2.5-flash",
+            apiKey = BuildConfig.GEMINI_API_KEY,
+            generationConfig = config,
+            systemInstruction = content {
+                text(
+                    """
+                    You are a competitive Pokemon team-building coach. The user gives you a team
+                    of up to six Pokemon with their types, plus a precomputed defensive summary
+                    of which attacking types the team is collectively weak to.
+
+                    RULES:
+                    1. Reply in the language named by the "Language:" line of the prompt. Use
+                       that language for everything, including Pokemon type names.
+                    2. Plain text only. No markdown, no asterisks, no headings, no code blocks.
+                    3. Keep it under 180 words.
+                    4. Structure the answer as three short labelled paragraphs, in this order:
+                       the team's biggest defensive hole, the single weakest member and why,
+                       and one concrete swap suggestion naming a replacement Pokemon.
+                    5. Base the analysis on the types given. Do not invent members.
+                    6. Be specific and practical. No filler and no disclaimers.
                     """.trimIndent()
                 )
             }
