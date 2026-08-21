@@ -14,19 +14,25 @@ import java.util.Locale
 enum class AppLanguage(
     /** The `language.name` value PokeAPI matches on. */
     val code: String,
+    /**
+     * BCP-47 tag for Android resources, which does not always match [code]: PokeAPI uses
+     * "zh-hans" where Android wants "zh-Hans", and its "ja-hrkt" (kana) has no resource
+     * equivalent at all, so the interface for it falls back to plain Japanese.
+     */
+    val androidTag: String,
     val label: String
 ) {
-    ENGLISH("en", "English"),
-    SPANISH("es", "Español"),
-    SPANISH_LATAM("es-419", "Español (Latinoamérica)"),
-    FRENCH("fr", "Français"),
-    GERMAN("de", "Deutsch"),
-    ITALIAN("it", "Italiano"),
-    JAPANESE("ja", "日本語 (漢字)"),
-    JAPANESE_KANA("ja-hrkt", "日本語 (かな)"),
-    KOREAN("ko", "한국어"),
-    CHINESE_SIMPLIFIED("zh-hans", "简体中文"),
-    CHINESE_TRADITIONAL("zh-hant", "繁體中文");
+    ENGLISH("en", "en", "English"),
+    SPANISH("es", "es", "Español"),
+    SPANISH_LATAM("es-419", "es-419", "Español (Latinoamérica)"),
+    FRENCH("fr", "fr", "Français"),
+    GERMAN("de", "de", "Deutsch"),
+    ITALIAN("it", "it", "Italiano"),
+    JAPANESE("ja", "ja", "日本語 (漢字)"),
+    JAPANESE_KANA("ja-hrkt", "ja", "日本語 (かな)"),
+    KOREAN("ko", "ko", "한국어"),
+    CHINESE_SIMPLIFIED("zh-hans", "zh-Hans", "简体中文"),
+    CHINESE_TRADITIONAL("zh-hant", "zh-Hant", "繁體中文");
 
     companion object {
         val DEFAULT = ENGLISH
