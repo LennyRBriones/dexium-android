@@ -3,6 +3,7 @@ package com.anvorgueso.dexium.core.repository
 import com.anvorgueso.dexium.core.database.dao.GenerationDao
 import com.anvorgueso.dexium.core.database.dao.PokemonDao
 import com.anvorgueso.dexium.core.database.dao.PokemonDetailDao
+import com.anvorgueso.dexium.core.mappers.EncounterMapper.toGameEncounters
 import com.anvorgueso.dexium.core.mappers.EvolutionMapper.toEvolutionStages
 import com.anvorgueso.dexium.core.mappers.PokemonMapper.toDomainModel
 import com.anvorgueso.dexium.core.mappers.PokemonMapper.toPokemonDetailEntity
@@ -10,9 +11,11 @@ import com.anvorgueso.dexium.core.mappers.PokemonMapper.toPokemonEntity
 import com.anvorgueso.dexium.core.network.api.EvolutionApiService
 import com.anvorgueso.dexium.core.network.api.PokemonApiService
 import com.anvorgueso.dexium.core.network.api.PokemonSpeciesApiService
+import com.anvorgueso.dexium.core.network.api.TypeApiService
 import com.anvorgueso.dexium.core.database.entity.PokemonEntity
 import com.anvorgueso.dexium.core.util.Constants
 import com.anvorgueso.dexium.domain.model.DexCategory
+import com.anvorgueso.dexium.domain.model.GameEncounters
 import com.anvorgueso.dexium.core.util.NetworkConnectivityHelper
 import com.anvorgueso.dexium.core.util.Resource
 import com.anvorgueso.dexium.core.util.capitalizeFirst
@@ -39,6 +42,7 @@ class PokemonRepositoryImpl @Inject constructor(
     private val speciesApi: PokemonSpeciesApiService,
     private val evolutionApi: EvolutionApiService,
     private val abilityApi: com.anvorgueso.dexium.core.network.api.AbilityApiService,
+    private val typeApi: TypeApiService,
     private val pokemonDao: PokemonDao,
     private val pokemonDetailDao: PokemonDetailDao,
     private val generationDao: GenerationDao,
@@ -78,9 +82,10 @@ class PokemonRepositoryImpl @Inject constructor(
         val useHd = userPreferencesRepository.userPreferences.first().useHdImages
         val offset = page * pageSize
 
-        val localPokemon = pokemonDao.getPaginatedByCategory(category.name, pageSize, offset)
+        val queryName = category.queryCategory.name
+        val localPokemon = pokemonDao.getPaginatedByCategory(queryName, pageSize, offset)
         if (localPokemon.isNotEmpty()) {
-            emit(Resource.Success(localPokemon.map { it.toDomainModel(useHd) }))
+            emit(Resource.Success(localPokemon.map { it.toDomainModel(useHd, category.isShiny) }))
             return@flow
         }
 
@@ -108,8 +113,8 @@ class PokemonRepositoryImpl @Inject constructor(
 
                 if (entities.isNotEmpty()) {
                     pokemonDao.insertAll(entities)
-                    val filtered = entities.filter { it.dexCategory == category.name }
-                    emit(Resource.Success(filtered.map { it.toDomainModel(useHd) }))
+                    val filtered = entities.filter { it.dexCategory == queryName }
+                    emit(Resource.Success(filtered.map { it.toDomainModel(useHd, category.isShiny) }))
                 }
             } catch (e: Exception) {
                 emit(Resource.Error("Failed to load Pok\u00e9mon: ${e.localizedMessage}"))
@@ -191,14 +196,14 @@ class PokemonRepositoryImpl @Inject constructor(
                 pokemonDao.searchFormsByNameAndRegion(query, formRegion)
             }
             generationId != null -> {
-                pokemonDao.searchByNameCategoryAndGeneration(query, category.name, generationId)
+                pokemonDao.searchByNameCategoryAndGeneration(query, category.queryCategory.name, generationId)
             }
             else -> {
-                pokemonDao.searchByNameAndCategory(query, category.name)
+                pokemonDao.searchByNameAndCategory(query, category.queryCategory.name)
             }
         }
         searchFlow.collect { results ->
-            emit(Resource.Success(results.map { it.toDomainModel(useHd) }))
+            emit(Resource.Success(results.map { it.toDomainModel(useHd, category.isShiny) }))
         }
     }
 
@@ -206,9 +211,9 @@ class PokemonRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
         val useHd = userPreferencesRepository.userPreferences.first().useHdImages
 
-        val localResults = pokemonDao.getByGenerationAndCategory(generationId, category.name)
+        val localResults = pokemonDao.getByGenerationAndCategory(generationId, category.queryCategory.name)
         if (localResults.isNotEmpty()) {
-            emit(Resource.Success(localResults.map { it.toDomainModel(useHd) }))
+            emit(Resource.Success(localResults.map { it.toDomainModel(useHd, category.isShiny) }))
             return@flow
         }
 
@@ -235,7 +240,7 @@ class PokemonRepositoryImpl @Inject constructor(
                             allEntities.addAll(entities)
                         }
                     }
-                    emit(Resource.Success(allEntities.map { it.toDomainModel(useHd) }))
+                    emit(Resource.Success(allEntities.map { it.toDomainModel(useHd, category.isShiny) }))
                 } else {
                     emit(Resource.Error("No generation data available. Try refreshing."))
                 }
@@ -250,8 +255,8 @@ class PokemonRepositoryImpl @Inject constructor(
     override fun getAllByCategory(category: DexCategory): Flow<Resource<List<Pokemon>>> = flow {
         emit(Resource.Loading())
         val useHd = userPreferencesRepository.userPreferences.first().useHdImages
-        val results = pokemonDao.getAllByCategory(category.name)
-        emit(Resource.Success(results.map { it.toDomainModel(useHd) }))
+        val results = pokemonDao.getAllByCategory(category.queryCategory.name)
+        emit(Resource.Success(results.map { it.toDomainModel(useHd, category.isShiny) }))
     }
 
     override fun getPokemonByFormRegion(formRegion: String?): Flow<Resource<List<Pokemon>>> = flow {
@@ -283,7 +288,7 @@ class PokemonRepositoryImpl @Inject constructor(
                     spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png",
                     hdSpriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
                     animatedSpriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/$id.gif",
-                    typePrimary = "Unknown",
+                    typePrimary = Pokemon.UNKNOWN_TYPE,
                     typeSecondary = null,
                     generationId = genLookup[id] ?: 0,
                     dexCategory = category.name,
@@ -303,7 +308,95 @@ class PokemonRepositoryImpl @Inject constructor(
                     formRegion = stub.formRegion
                 )
             }
+
+            // The stubs above carry Pokemon.UNKNOWN_TYPE, which is the same sentinel the cards
+            // read before drawing badges, so this guard and the UI can never disagree. It counts
+            // placeholders instead of probing a single row on purpose: page 0 can land real data
+            // before this runs, so a row-1 probe would see a real type and skip the other ~1300.
+            // Counting also self-heals a partial backfill and settles at ~0 once it succeeds, so
+            // later launches issue no /type requests at all.
+            if (pokemonDao.getCountByTypePrimary(Pokemon.UNKNOWN_TYPE) > TYPE_BACKFILL_THRESHOLD) {
+                precacheTypes()
+            }
         } catch (_: Exception) {
+        }
+    }
+
+    /**
+     * Backfills types for the whole dex. Asking for each Pokémon's detail would be ~1300
+     * requests, but /type/{id} lists every Pokémon carrying that type, so the 18 canonical
+     * types cover the national dex plus its forms in 18 concurrent requests.
+     */
+    private suspend fun precacheTypes() {
+        val responses = coroutineScope {
+            (1..CANONICAL_TYPE_COUNT).map { typeId ->
+                async {
+                    try {
+                        typeApi.getType(typeId)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+            }.awaitAll().filterNotNull()
+        }
+
+        if (responses.isEmpty()) return
+
+        // PokemonTypeColors keys are capitalized ("Fire"), and getColor does an exact lookup,
+        // so an uncapitalized name here would silently paint every card with the Normal color.
+        val typeMap = mutableMapOf<Int, Pair<String?, String?>>()
+        for (response in responses) {
+            val typeName = response.name.capitalizeFirst()
+            for (entry in response.pokemon) {
+                val id = entry.pokemon.url.extractIdFromUrl()
+                if (id <= 0) continue
+                val existing = typeMap[id] ?: (null to null)
+                typeMap[id] = when (entry.slot) {
+                    1 -> typeName to existing.second
+                    2 -> existing.first to typeName
+                    else -> existing
+                }
+            }
+        }
+
+        if (typeMap.isEmpty()) return
+
+        // One read, one write. Rows the map does not cover keep their placeholder so the badge
+        // sentinel still hides them, and unchanged rows are dropped so a re-run writes nothing.
+        val updated = pokemonDao.getAllSync().mapNotNull { entity ->
+            val resolved = typeMap[entity.id] ?: return@mapNotNull null
+            val primary = resolved.first ?: entity.typePrimary
+            val secondary = resolved.second
+            if (primary == entity.typePrimary && secondary == entity.typeSecondary) {
+                return@mapNotNull null
+            }
+            entity.copy(typePrimary = primary, typeSecondary = secondary)
+        }
+
+        if (updated.isNotEmpty()) {
+            pokemonDao.insertAll(updated)
+        }
+    }
+
+    override suspend fun getPokemonByIds(ids: List<Int>): List<Pokemon> {
+        if (ids.isEmpty()) return emptyList()
+        val useHd = userPreferencesRepository.userPreferences.first().useHdImages
+        return pokemonDao.getByIds(ids).map { it.toDomainModel(useHd) }
+    }
+
+    // Not cached in Room on purpose: the OkHttp cache already keeps this for 5 minutes fresh
+    // and serves it for 7 days while offline (see CacheInterceptor), and a new Room column
+    // would trip fallbackToDestructiveMigration and wipe every installed user's cache.
+    override suspend fun getPokemonEncounters(id: Int): Resource<List<GameEncounters>> {
+        val locale = java.util.Locale.getDefault().language
+        return try {
+            Resource.Success(pokemonApi.getPokemonEncounters(id).toGameEncounters(locale))
+        } catch (e: Exception) {
+            if (!networkHelper.isNetworkAvailable()) {
+                Resource.Error("NO_INTERNET")
+            } else {
+                Resource.Error("LOAD_FAILED")
+            }
         }
     }
 
@@ -362,5 +455,17 @@ class PokemonRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             0
         }
+    }
+
+    private companion object {
+        /** PokeAPI type ids 1..18 are the canonical types; 10000+ are shadow/unknown. */
+        const val CANONICAL_TYPE_COUNT = 18
+
+        /**
+         * A handful of very new forms may not appear under any /type endpoint, so requiring
+         * exactly zero placeholders would re-run the backfill on every launch. This tolerance
+         * is far below the ~1300 placeholders a fresh install starts with.
+         */
+        const val TYPE_BACKFILL_THRESHOLD = 50
     }
 }

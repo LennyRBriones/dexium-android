@@ -2,6 +2,7 @@ package com.anvorgueso.dexium.domain.repository
 
 import com.anvorgueso.dexium.core.util.Resource
 import com.anvorgueso.dexium.domain.model.DexCategory
+import com.anvorgueso.dexium.domain.model.GameEncounters
 import com.anvorgueso.dexium.domain.model.Pokemon
 import com.anvorgueso.dexium.domain.model.PokemonDetail
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,12 @@ interface PokemonRepository {
     fun getPokemonByFormRegion(formRegion: String?): Flow<Resource<List<Pokemon>>>
     fun getAllByCategory(category: DexCategory): Flow<Resource<List<Pokemon>>>
     suspend fun precachePokemonNames()
+
+    /** Re-reads already-displayed rows from the cache, e.g. after the type backfill lands. */
+    suspend fun getPokemonByIds(ids: List<Int>): List<Pokemon>
+
+    /** Where this Pokémon can be caught, grouped by game. Empty when PokeAPI has no data. */
+    suspend fun getPokemonEncounters(id: Int): Resource<List<GameEncounters>>
     suspend fun syncAllPokemon(onProgress: (Int, Int) -> Unit = { _, _ -> })
     suspend fun refreshPokemonData()
     suspend fun getLocalPokemonCount(): Int
