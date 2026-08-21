@@ -16,8 +16,14 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon WHERE dexCategory = :category ORDER BY id ASC LIMIT :limit OFFSET :offset")
     suspend fun getPaginatedByCategory(category: String, limit: Int, offset: Int): List<PokemonEntity>
 
+    @Query("SELECT * FROM pokemon ORDER BY id ASC")
+    suspend fun getAllSync(): List<PokemonEntity>
+
     @Query("SELECT * FROM pokemon WHERE id = :id")
     suspend fun getById(id: Int): PokemonEntity?
+
+    @Query("SELECT * FROM pokemon WHERE id IN (:ids) ORDER BY id ASC")
+    suspend fun getByIds(ids: List<Int>): List<PokemonEntity>
 
     @Query("SELECT * FROM pokemon WHERE LOWER(name) = LOWER(:name) AND dexCategory = 'NATIONAL' LIMIT 1")
     suspend fun searchByExactName(name: String): PokemonEntity?
@@ -65,4 +71,7 @@ interface PokemonDao {
 
     @Query("SELECT COUNT(*) FROM pokemon WHERE dexCategory = :category")
     suspend fun getCountByCategory(category: String): Int
+
+    @Query("SELECT COUNT(*) FROM pokemon WHERE typePrimary = :typePrimary")
+    suspend fun getCountByTypePrimary(typePrimary: String): Int
 }

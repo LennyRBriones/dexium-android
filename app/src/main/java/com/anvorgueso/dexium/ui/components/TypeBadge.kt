@@ -67,3 +67,28 @@ fun TypeBadge(
     }
 }
 
+/**
+ * Icon-only variant for the grid cards, where a labelled pill would not fit and would show
+ * the untranslated English type name. Renders nothing when the type has no known symbol.
+ */
+@Composable
+fun TypeSymbol(
+    type: String,
+    modifier: Modifier = Modifier,
+    iconSize: Dp = 18.dp
+) {
+    val symbolUrl = PokemonTypeColors.getTypeSymbolUrl(type) ?: return
+
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(symbolUrl)
+            .crossfade(true)
+            .build(),
+        contentDescription = type,
+        contentScale = ContentScale.Fit,
+        modifier = modifier
+            .size(iconSize)
+            .clip(RoundedCornerShape(5.dp))
+    )
+}
+

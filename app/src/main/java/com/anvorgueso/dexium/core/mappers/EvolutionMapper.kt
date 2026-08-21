@@ -26,6 +26,7 @@ object EvolutionMapper {
                 pokemonId = pokemonId,
                 pokemonName = chain.species.name,
                 imageUrl = buildSpriteUrl(pokemonId, useHdImages),
+                shinyImageUrl = buildShinySpriteUrl(pokemonId),
                 isBaby = chain.isBaby,
                 minLevel = minLevel,
                 trigger = trigger
@@ -35,6 +36,10 @@ object EvolutionMapper {
         chain.evolvesTo.forEach { next ->
             flattenChain(next, stages, useHdImages)
         }
+    }
+
+    private fun buildShinySpriteUrl(pokemonId: Int): String {
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/$pokemonId.png"
     }
 
     private fun buildSpriteUrl(pokemonId: Int, useHd: Boolean): String {
