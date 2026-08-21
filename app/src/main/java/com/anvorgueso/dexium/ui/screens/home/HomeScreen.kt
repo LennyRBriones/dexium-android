@@ -35,8 +35,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -68,7 +68,8 @@ import com.anvorgueso.dexium.ui.components.EmptySearchState
 import com.anvorgueso.dexium.ui.components.ErrorState
 import com.anvorgueso.dexium.ui.components.GradientBackground
 import com.anvorgueso.dexium.ui.components.GlassTopBar
-import com.anvorgueso.dexium.ui.components.LoadingIndicator
+import com.anvorgueso.dexium.ui.components.GridFooterShimmer
+import com.anvorgueso.dexium.ui.components.PokemonGridShimmer
 import com.anvorgueso.dexium.ui.components.PokemonCard
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
 import androidx.compose.ui.res.stringResource
@@ -76,10 +77,11 @@ import com.anvorgueso.dexium.R
 
 @Composable
 fun HomeScreen(
-    onPokemonClick: (Int) -> Unit,
+    onPokemonClick: (Int, Boolean) -> Unit,
     onAboutClick: () -> Unit,
     onGuessGameClick: () -> Unit = {},
     onAiChatClick: () -> Unit = {},
+    onTeamBuilderClick: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -164,7 +166,7 @@ fun HomeScreen(
                         )
                     }
                 }
-            } else if (uiState.selectedDexCategory == DexCategory.NATIONAL && uiState.generations.isNotEmpty()) {
+            } else if (uiState.selectedDexCategory.isPaginated && uiState.generations.isNotEmpty()) {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -189,7 +191,7 @@ fun HomeScreen(
 
             when {
                 uiState.isLoading && uiState.pokemonList.isEmpty() -> {
-                    LoadingIndicator(message = stringResource(R.string.loading_creatures))
+                    PokemonGridShimmer()
                 }
                 uiState.error != null && uiState.pokemonList.isEmpty() -> {
                     ErrorState(
@@ -226,23 +228,20 @@ fun HomeScreen(
                         ) { pokemon ->
                             PokemonCard(
                                 pokemon = pokemon,
-                                onClick = { onPokemonClick(pokemon.id) }
+                                onClick = {
+                                    onPokemonClick(
+                                        pokemon.id,
+                                        uiState.selectedDexCategory.isShiny
+                                    )
+                                }
                             )
                         }
 
                         if (uiState.isLoadingMore) {
                             item(span = { GridItemSpan(3) }) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator(
-                                        color = glass.accent,
-                                        strokeWidth = 2.dp
-                                    )
-                                }
+                                GridFooterShimmer(
+                                    modifier = Modifier.padding(horizontal = 8.dp)
+                                )
                             }
                         }
                     }
@@ -292,6 +291,16 @@ fun HomeScreen(
                         onClick = {
                             showFabMenu = false
                             onAiChatClick()
+                        }
+                    )
+                    FabMenuItem(
+                        icon = Icons.Default.Groups,
+                        label = stringResource(R.string.team_builder),
+                        accent = glass.accent,
+                        shape = menuShape,
+                        onClick = {
+                            showFabMenu = false
+                            onTeamBuilderClick()
                         }
                     )
                     FabMenuItem(
