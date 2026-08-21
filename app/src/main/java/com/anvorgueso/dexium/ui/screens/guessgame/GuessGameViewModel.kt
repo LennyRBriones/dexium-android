@@ -1,18 +1,15 @@
 package com.anvorgueso.dexium.ui.screens.guessgame
 
-import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
+import com.anvorgueso.dexium.core.audio.CryPlayer
 import com.anvorgueso.dexium.core.database.dao.GenerationDao
 import com.anvorgueso.dexium.core.database.dao.PokemonDao
 import com.anvorgueso.dexium.core.database.entity.PokemonEntity
+import com.anvorgueso.dexium.domain.repository.HighScoreRepository
 import com.anvorgueso.dexium.domain.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,6 +42,8 @@ data class GuessGameUiState(
     val roundResults: List<RoundResult> = emptyList(),
     val isPlayingCry: Boolean = false,
     val isGameOver: Boolean = false,
+    val highScore: Int? = null,
+    val isNewRecord: Boolean = false,
     val showExitDialog: Boolean = false,
     val error: String? = null
 )
@@ -55,7 +54,8 @@ class GuessGameViewModel @Inject constructor(
     private val pokemonDao: PokemonDao,
     private val generationDao: GenerationDao,
     private val pokemonRepository: PokemonRepository,
-    @ApplicationContext private val context: Context
+    private val highScoreRepository: HighScoreRepository,
+    private val cryPlayer: CryPlayer
 ) : ViewModel() {
 
     private val generationIdsArg: String = savedStateHandle["generationIds"] ?: "all"
@@ -65,10 +65,18 @@ class GuessGameViewModel @Inject constructor(
 
     private var pokemonPool: List<PokemonEntity> = emptyList()
     private var gameRounds: List<PokemonEntity> = emptyList()
-    private var exoPlayer: ExoPlayer? = null
 
     init {
         initializeGame()
+        observeCryPlayback()
+    }
+
+    private fun observeCryPlayback() {
+        viewModelScope.launch {
+            cryPlayer.isPlaying.collect { playing ->
+                _uiState.update { it.copy(isPlayingCry = playing) }
+            }
+        }
     }
 
     private fun initializeGame() {
@@ -105,7 +113,6 @@ class GuessGameViewModel @Inject constructor(
 
             _uiState.update { it.copy(totalRounds = roundCount) }
 
-            initExoPlayer()
             loadRound(0)
         }
     }
@@ -115,25 +122,10 @@ class GuessGameViewModel @Inject constructor(
         return generationIdsArg.split(",").mapNotNull { it.trim().toIntOrNull() }
     }
 
-    private fun initExoPlayer() {
-        exoPlayer = ExoPlayer.Builder(context).build().apply {
-            addListener(object : Player.Listener {
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    _uiState.update { it.copy(isPlayingCry = isPlaying) }
-                }
-
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    if (playbackState == Player.STATE_ENDED || playbackState == Player.STATE_IDLE) {
-                        _uiState.update { it.copy(isPlayingCry = false) }
-                    }
-                }
-            })
-        }
-    }
-
     private fun loadRound(roundIndex: Int) {
         if (roundIndex >= gameRounds.size) {
-            _uiState.update { it.copy(isGameOver = true, isLoading = false) }
+            _uiState.update { it.copy(isLoading = false) }
+            finishGame()
             return
         }
 
@@ -145,7 +137,7 @@ class GuessGameViewModel @Inject constructor(
             .map { it.name }
         val options = (wrongOptions + pokemon.name).shuffled()
 
-        val cryUrl = "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg"
+        val cryUrl = CryPlayer.cryUrlFor(pokemon.id)
         val artworkUrl = pokemon.hdSpriteUrl
             ?: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png"
 
@@ -198,20 +190,43 @@ class GuessGameViewModel @Inject constructor(
     private fun advanceToNextRound() {
         val nextRound = _uiState.value.currentRound + 1
         if (nextRound >= _uiState.value.totalRounds) {
-            _uiState.update { it.copy(isGameOver = true) }
+            finishGame()
         } else {
             loadRound(nextRound)
         }
     }
 
-    fun playCry() {
+    /** Records the run before flipping to the result screen, so it can show the standing best. */
+    private fun finishGame() {
         val state = _uiState.value
-        exoPlayer?.let { player ->
-            player.stop()
-            player.setMediaItem(MediaItem.fromUri(state.cryUrl))
-            player.prepare()
-            player.play()
+        if (state.isGameOver) return
+
+        viewModelScope.launch {
+            // A game that never dealt a round must not overwrite a real record with a zero,
+            // so that case only reads the standing best.
+            val result = if (state.roundResults.isEmpty()) {
+                highScoreRepository.getForMode(generationIdsArg)?.let {
+                    HighScoreRepository.SubmitResult(it, isNewRecord = false)
+                }
+            } else {
+                highScoreRepository.submit(
+                    rawMode = generationIdsArg,
+                    score = state.score,
+                    total = state.totalRounds
+                )
+            }
+            _uiState.update {
+                it.copy(
+                    isGameOver = true,
+                    highScore = result?.record?.score,
+                    isNewRecord = result?.isNewRecord ?: false
+                )
+            }
         }
+    }
+
+    fun playCry() {
+        cryPlayer.play(_uiState.value.cryUrl)
     }
 
     fun showExitDialog() {
@@ -224,7 +239,6 @@ class GuessGameViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        exoPlayer?.release()
-        exoPlayer = null
+        cryPlayer.release()
     }
 }
