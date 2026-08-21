@@ -10,3 +10,10 @@ app/release/
 .cxx
 .gradle
 local.properties
+
+# Signing keys — never commit these
+*.jks
+*.keystore
+
+# Kotlin compiler error dumps
+.kotlin/
