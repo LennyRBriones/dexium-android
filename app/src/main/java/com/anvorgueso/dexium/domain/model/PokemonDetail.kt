@@ -19,5 +19,11 @@ data class PokemonDetail(
     val habitat: String?,
     val isLegendary: Boolean,
     val isMythical: Boolean,
-    val evolutionChain: List<EvolutionStage>
+    val evolutionChain: List<EvolutionStage>,
+    /**
+     * The animated Showdown sprite the home grid uses, but *not* gated on the sprite
+     * preference — the detail screen's 3D toggle needs it available on demand.
+     */
+    val animated3dUrl: String?,
+    val shinyAnimated3dUrl: String?
 )

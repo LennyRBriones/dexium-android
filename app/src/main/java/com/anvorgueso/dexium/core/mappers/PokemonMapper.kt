@@ -10,6 +10,7 @@ import com.anvorgueso.dexium.core.util.capitalizeFirst
 import com.anvorgueso.dexium.core.util.cleanFlavorText
 import com.anvorgueso.dexium.core.util.extractIdFromUrl
 import com.anvorgueso.dexium.domain.model.Ability
+import com.anvorgueso.dexium.domain.model.EvolutionRequirement
 import com.anvorgueso.dexium.domain.model.EvolutionStage
 import com.anvorgueso.dexium.domain.model.Pokemon
 import com.anvorgueso.dexium.domain.model.PokemonDetail
@@ -39,7 +40,31 @@ object PokemonMapper {
         val pokemonName: String,
         val isBaby: Boolean,
         val minLevel: Int?,
-        val trigger: String?
+        val trigger: String?,
+        /** Null on rows cached before conditions were stored; those fall back to [minLevel]. */
+        val requirement: RequirementJson? = null
+    )
+
+    /** Mirrors [EvolutionRequirement]; slugs stay canonical so the label follows the language. */
+    data class RequirementJson(
+        val trigger: String? = null,
+        val minLevel: Int? = null,
+        val item: String? = null,
+        val heldItem: String? = null,
+        val knownMove: String? = null,
+        val knownMoveType: String? = null,
+        val location: String? = null,
+        val partySpecies: String? = null,
+        val partyType: String? = null,
+        val tradeSpecies: String? = null,
+        val minHappiness: Int? = null,
+        val minAffection: Int? = null,
+        val minBeauty: Int? = null,
+        val timeOfDay: String? = null,
+        val gender: Int? = null,
+        val relativePhysicalStats: Int? = null,
+        val needsOverworldRain: Boolean = false,
+        val turnUpsideDown: Boolean = false
     )
 
     fun PokemonDetailDto.toPokemonEntity(generationId: Int = 0): PokemonEntity {
@@ -53,7 +78,7 @@ object PokemonMapper {
                 ?: sprites.other?.home?.frontDefault,
             animatedSpriteUrl = sprites.other?.showdown?.frontDefault
                 ?: buildAnimatedSpriteUrl(id),
-            typePrimary = types.firstOrNull()?.type?.name?.capitalizeFirst() ?: "Unknown",
+            typePrimary = types.firstOrNull()?.type?.name?.capitalizeFirst() ?: Pokemon.UNKNOWN_TYPE,
             typeSecondary = types.getOrNull(1)?.type?.name?.capitalizeFirst(),
             generationId = generationId,
             dexCategory = category.name,
@@ -91,7 +116,35 @@ object PokemonMapper {
 
         val evolutionJson = evolutionListAdapter.toJson(
             evolutionStages.map {
-                EvolutionJson(it.pokemonId, it.pokemonName, it.isBaby, it.minLevel, it.trigger)
+                EvolutionJson(
+                    pokemonId = it.pokemonId,
+                    pokemonName = it.pokemonName,
+                    isBaby = it.isBaby,
+                    minLevel = it.minLevel,
+                    trigger = it.trigger,
+                    requirement = it.requirement?.let { req ->
+                        RequirementJson(
+                            trigger = req.trigger,
+                            minLevel = req.minLevel,
+                            item = req.item,
+                            heldItem = req.heldItem,
+                            knownMove = req.knownMove,
+                            knownMoveType = req.knownMoveType,
+                            location = req.location,
+                            partySpecies = req.partySpecies,
+                            partyType = req.partyType,
+                            tradeSpecies = req.tradeSpecies,
+                            minHappiness = req.minHappiness,
+                            minAffection = req.minAffection,
+                            minBeauty = req.minBeauty,
+                            timeOfDay = req.timeOfDay,
+                            gender = req.gender,
+                            relativePhysicalStats = req.relativePhysicalStats,
+                            needsOverworldRain = req.needsOverworldRain,
+                            turnUpsideDown = req.turnUpsideDown
+                        )
+                    }
+                )
             }
         )
 
@@ -132,12 +185,21 @@ object PokemonMapper {
         )
     }
 
-    fun PokemonEntity.toDomainModel(useHdImages: Boolean): Pokemon {
+    /**
+     * [shiny] powers the Shiny Dex. The grid table has no shiny columns, but PokeAPI's shiny
+     * sprite paths are just the normal ones with a `shiny/` segment, so they are derived from
+     * the id instead of being cached — no schema change, no destructive migration.
+     */
+    fun PokemonEntity.toDomainModel(useHdImages: Boolean, shiny: Boolean = false): Pokemon {
         return Pokemon(
             id = id,
             name = name,
-            imageUrl = hdSpriteUrl ?: spriteUrl ?: "",
-            animatedImageUrl = if (useHdImages) animatedSpriteUrl else null,
+            imageUrl = if (shiny) buildShinyArtworkUrl(id) else hdSpriteUrl ?: spriteUrl ?: "",
+            animatedImageUrl = when {
+                !useHdImages -> null
+                shiny -> buildShinyAnimatedSpriteUrl(id)
+                else -> animatedSpriteUrl
+            },
             typePrimary = typePrimary,
             typeSecondary = typeSecondary
         )
@@ -158,9 +220,32 @@ object PokemonMapper {
                     pokemonId = it.pokemonId,
                     pokemonName = it.pokemonName.capitalizeFirst(),
                     imageUrl = buildSpriteUrl(it.pokemonId, useHdImages),
+                    shinyImageUrl = buildShinyArtworkUrl(it.pokemonId),
                     isBaby = it.isBaby,
                     minLevel = it.minLevel,
-                    trigger = it.trigger
+                    trigger = it.trigger,
+                    requirement = it.requirement?.let { req ->
+                        EvolutionRequirement(
+                            trigger = req.trigger,
+                            minLevel = req.minLevel,
+                            item = req.item,
+                            heldItem = req.heldItem,
+                            knownMove = req.knownMove,
+                            knownMoveType = req.knownMoveType,
+                            location = req.location,
+                            partySpecies = req.partySpecies,
+                            partyType = req.partyType,
+                            tradeSpecies = req.tradeSpecies,
+                            minHappiness = req.minHappiness,
+                            minAffection = req.minAffection,
+                            minBeauty = req.minBeauty,
+                            timeOfDay = req.timeOfDay,
+                            gender = req.gender,
+                            relativePhysicalStats = req.relativePhysicalStats,
+                            needsOverworldRain = req.needsOverworldRain,
+                            turnUpsideDown = req.turnUpsideDown
+                        )
+                    }
                 )
             } ?: emptyList()
         } catch (e: Exception) { emptyList() }
@@ -188,7 +273,12 @@ object PokemonMapper {
             habitat = habitat,
             isLegendary = isLegendary,
             isMythical = isMythical,
-            evolutionChain = evolution
+            evolutionChain = evolution,
+            // Ungated on purpose, unlike animatedImageUrl above: the detail screen's 3D toggle
+            // is an explicit user action, so it must work even when the sprite preference is
+            // set to artworks — otherwise flipping the switch would do nothing.
+            animated3dUrl = animatedSpriteUrl,
+            shinyAnimated3dUrl = shinyAnimatedSpriteUrl
         )
     }
 
@@ -207,4 +297,9 @@ object PokemonMapper {
     private fun buildShinyAnimatedSpriteUrl(pokemonId: Int): String {
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/$pokemonId.gif"
     }
+
+    private fun buildShinyArtworkUrl(pokemonId: Int): String {
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/$pokemonId.png"
+    }
+
 }

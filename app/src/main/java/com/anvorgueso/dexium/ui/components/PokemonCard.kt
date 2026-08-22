@@ -1,8 +1,10 @@
 package com.anvorgueso.dexium.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,7 +44,13 @@ fun PokemonCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val typeColor = PokemonTypeColors.getColor(pokemon.typePrimary)
+    // A stub row's placeholder type would otherwise tint every card with the Normal color,
+    // so fall back to a neutral tint until the type backfill has run.
+    val typeColor = if (pokemon.hasRealType) {
+        PokemonTypeColors.getColor(pokemon.typePrimary)
+    } else {
+        TextTertiary
+    }
 
     var useAnimated by remember(pokemon.id) { mutableStateOf(pokemon.animatedImageUrl != null) }
     val displayUrl = if (useAnimated && pokemon.animatedImageUrl != null) {
@@ -122,6 +130,14 @@ fun PokemonCard(
                 textAlign = TextAlign.Center
             )
 
+            if (pokemon.hasRealType) {
+                Spacer(modifier = Modifier.height(3.dp))
+
+                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                    TypeSymbol(type = pokemon.typePrimary, iconSize = 16.dp)
+                    pokemon.typeSecondary?.let { TypeSymbol(type = it, iconSize = 16.dp) }
+                }
+            }
         }
     }
 }

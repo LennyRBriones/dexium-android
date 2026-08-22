@@ -82,6 +82,26 @@ class HomeViewModel @Inject constructor(
     private fun precacheNames() {
         viewModelScope.launch {
             pokemonRepository.precachePokemonNames()
+            refreshDisplayedTypes()
+        }
+    }
+
+    /**
+     * The name precache and its type backfill run off the critical path, so the grid can
+     * already be showing rows that were still placeholders when they were read. Patch those
+     * in place instead of reloading, which would reset pagination and the scroll position.
+     */
+    private suspend fun refreshDisplayedTypes() {
+        val stale = _uiState.value.pokemonList.filterNot { it.hasRealType }
+        if (stale.isEmpty()) return
+
+        val refreshed = pokemonRepository.getPokemonByIds(stale.map { it.id })
+            .filter { it.hasRealType }
+            .associateBy { it.id }
+        if (refreshed.isEmpty()) return
+
+        _uiState.update { state ->
+            state.copy(pokemonList = state.pokemonList.map { refreshed[it.id] ?: it })
         }
     }
 
@@ -126,7 +146,7 @@ class HomeViewModel @Inject constructor(
                 loadGeneration(generationId, category)
             }
             else -> {
-                if (category == DexCategory.NATIONAL) {
+                if (category.isPaginated) {
                     _uiState.update { it.copy(pokemonList = emptyList(), currentPage = 0, canLoadMore = true) }
                     loadPokemonPage(0)
                 } else {
@@ -270,7 +290,7 @@ class HomeViewModel @Inject constructor(
                 selectedDexCategory = category,
                 pokemonList = emptyList(),
                 currentPage = 0,
-                canLoadMore = category == DexCategory.NATIONAL,
+                canLoadMore = category.isPaginated,
                 selectedGenerationId = null,
                 selectedFormRegion = null,
                 searchQuery = ""
@@ -279,9 +299,9 @@ class HomeViewModel @Inject constructor(
         _searchQuery.value = ""
         _selectedGeneration.value = null
 
-        when (category) {
-            DexCategory.NATIONAL -> loadPokemonPage(0)
-            DexCategory.FORMS -> loadFormRegion(null)
+        when {
+            category.isPaginated -> loadPokemonPage(0)
+            category == DexCategory.FORMS -> loadFormRegion(null)
             else -> loadAllByCategory(category)
         }
     }

@@ -2,6 +2,7 @@ package com.anvorgueso.dexium.ui.screens.about
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.anvorgueso.dexium.core.util.AppLanguage
 import com.anvorgueso.dexium.domain.repository.PokemonRepository
 import com.anvorgueso.dexium.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,8 @@ import javax.inject.Inject
 data class AboutUiState(
     val useHdImages: Boolean = true,
     val useImperialUnits: Boolean = false,
+    val language: AppLanguage = AppLanguage.fromDeviceLocale(),
+    val isFollowingDeviceLanguage: Boolean = true,
     val cachedPokemonCount: Int = 0,
     val totalPokemonCount: Int = 0,
     val isSyncing: Boolean = false,
@@ -39,7 +42,12 @@ class AboutViewModel @Inject constructor(
         viewModelScope.launch {
             userPreferencesRepository.userPreferences.collect { prefs ->
                 _uiState.update {
-                    it.copy(useHdImages = prefs.useHdImages, useImperialUnits = prefs.useImperialUnits)
+                    it.copy(
+                        useHdImages = prefs.useHdImages,
+                        useImperialUnits = prefs.useImperialUnits,
+                        language = prefs.language,
+                        isFollowingDeviceLanguage = prefs.isFollowingDevice
+                    )
                 }
             }
         }
@@ -70,6 +78,18 @@ class AboutViewModel @Inject constructor(
     fun toggleImperialUnits(useImperial: Boolean) {
         viewModelScope.launch {
             userPreferencesRepository.setUseImperialUnits(useImperial)
+        }
+    }
+
+    /**
+     * Cached details hold descriptions, genera and type names already translated, so changing
+     * the language has to drop them — otherwise the detail screen keeps serving the old
+     * language until each Pokémon happens to be refetched.
+     */
+    fun setLanguage(language: AppLanguage?) {
+        viewModelScope.launch {
+            userPreferencesRepository.setLanguage(language?.code)
+            pokemonRepository.clearDetailCache()
         }
     }
 

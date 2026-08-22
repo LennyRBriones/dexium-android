@@ -37,17 +37,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anvorgueso.dexium.R
 import com.anvorgueso.dexium.core.util.Resource
+import com.anvorgueso.dexium.ui.theme.WarningAmber
+import com.anvorgueso.dexium.core.util.GameMode
+import com.anvorgueso.dexium.domain.model.HighScore
 import com.anvorgueso.dexium.domain.model.Generation
+import com.anvorgueso.dexium.domain.repository.HighScoreRepository
 import com.anvorgueso.dexium.domain.repository.GenerationRepository
 import com.anvorgueso.dexium.ui.components.GlassCard
 import com.anvorgueso.dexium.ui.components.GlassTopBar
 import com.anvorgueso.dexium.ui.components.GradientBackground
-import com.anvorgueso.dexium.ui.components.LoadingIndicator
+import com.anvorgueso.dexium.ui.components.CardListShimmer
 import com.anvorgueso.dexium.ui.theme.DexiumGlass
 import com.anvorgueso.dexium.ui.theme.GlassBlue
 import com.anvorgueso.dexium.ui.theme.GlassBlueSoft
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -68,8 +74,13 @@ private val genAccentColors = listOf(
 
 @HiltViewModel
 class GenerationSelectViewModel @Inject constructor(
-    private val generationRepository: GenerationRepository
+    private val generationRepository: GenerationRepository,
+    private val highScoreRepository: HighScoreRepository
 ) : ViewModel() {
+
+    /** Records keyed by normalized mode, so each card can show its own best. */
+    val highScores: StateFlow<Map<String, HighScore>> = highScoreRepository.observeAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyMap())
 
     private val _generations = MutableStateFlow<List<Generation>>(emptyList())
     val generations: StateFlow<List<Generation>> = _generations.asStateFlow()
@@ -103,6 +114,7 @@ fun GenerationSelectScreen(
 ) {
     val generations by viewModel.generations.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val highScores by viewModel.highScores.collectAsState()
     val glass = DexiumGlass.colors
 
     GradientBackground {
@@ -113,7 +125,7 @@ fun GenerationSelectScreen(
             )
 
             if (isLoading) {
-                LoadingIndicator(message = stringResource(R.string.guess_loading))
+                CardListShimmer(rowCount = 7)
                 return@GradientBackground
             }
 
@@ -133,25 +145,31 @@ fun GenerationSelectScreen(
                         glowColor = GlassBlue,
                         contentPadding = 16.dp
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Shuffle,
-                                contentDescription = null,
-                                tint = GlassBlue,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = stringResource(R.string.guess_all_generations),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Shuffle,
+                                    contentDescription = null,
+                                    tint = GlassBlue,
+                                    modifier = Modifier.size(32.dp)
                                 )
+                                Spacer(modifier = Modifier.width(16.dp))
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = stringResource(R.string.guess_all_generations),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                             }
+                            RecordLabel(
+                                record = highScores[GameMode.ALL],
+                                modifier = Modifier.align(Alignment.TopEnd)
+                            )
                         }
                     }
                 }
@@ -166,6 +184,7 @@ fun GenerationSelectScreen(
                         glowColor = accentColor,
                         contentPadding = 16.dp
                     ) {
+                        Box(modifier = Modifier.fillMaxWidth()) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
@@ -205,6 +224,11 @@ fun GenerationSelectScreen(
                                     )
                                 }
                             }
+                        }
+                            RecordLabel(
+                                record = highScores[GameMode.normalize(generation.id.toString())],
+                                modifier = Modifier.align(Alignment.TopEnd)
+                            )
                         }
                     }
                 }
@@ -251,4 +275,23 @@ fun GenerationSelectScreen(
             }
         }
     }
+}
+
+/** Small "Récord N" line under a mode's title; says so plainly when there is none yet. */
+@Composable
+private fun RecordLabel(record: HighScore?, modifier: Modifier = Modifier) {
+    Text(
+        modifier = modifier,
+        text = if (record == null) {
+            stringResource(R.string.guess_no_record)
+        } else {
+            stringResource(R.string.guess_record_short, record.score)
+        },
+        style = MaterialTheme.typography.labelSmall,
+        color = if (record == null) {
+            Color.White.copy(alpha = 0.35f)
+        } else {
+            WarningAmber
+        }
+    )
 }
