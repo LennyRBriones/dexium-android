@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -46,6 +48,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -455,50 +458,78 @@ private fun DetailContent(
 
                         Spacer(modifier = Modifier.height(12.dp))
 
-                        Row(
+                        // Scrolls horizontally: Eevee's line has nine stages, which no fixed
+                        // Row can fit, and SpaceEvenly used to crush them together while long
+                        // names like "Wormadam-plant" wrapped onto two lines.
+                        LazyRow(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.Top
                         ) {
-                            pokemon.evolutionChain.forEachIndexed { index, stage ->
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.clickable {
-                                        if (stage.pokemonId != pokemon.id) {
-                                            onPokemonClick(stage.pokemonId, shiny)
+                            itemsIndexed(
+                                items = pokemon.evolutionChain,
+                                key = { index, stage -> "${stage.pokemonId}-$index" }
+                            ) { index, stage ->
+                                Row(verticalAlignment = Alignment.Top) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .width(EVOLUTION_STAGE_WIDTH)
+                                            .clickable {
+                                                if (stage.pokemonId != pokemon.id) {
+                                                    onPokemonClick(stage.pokemonId, shiny)
+                                                }
+                                            }
+                                    ) {
+                                        AsyncImage(
+                                            model = ImageRequest.Builder(LocalContext.current)
+                                                .data(
+                                                    if (shiny) stage.shinyImageUrl
+                                                    else stage.imageUrl
+                                                )
+                                                .crossfade(true)
+                                                .build(),
+                                            contentDescription = stage.pokemonName,
+                                            contentScale = ContentScale.Fit,
+                                            modifier = Modifier.size(EVOLUTION_SPRITE_SIZE)
+                                        )
+                                        Text(
+                                            text = stage.pokemonName,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = if (stage.pokemonId == pokemon.id) {
+                                                typeColor
+                                            } else {
+                                                TextSecondary
+                                            },
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                        stage.minLevel?.let {
+                                            Text(
+                                                text = "Lv.$it",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = TextTertiary
+                                            )
                                         }
                                     }
-                                ) {
-                                    AsyncImage(
-                                        model = ImageRequest.Builder(LocalContext.current)
-                                            .data(if (shiny) stage.shinyImageUrl else stage.imageUrl)
-                                            .crossfade(true)
-                                            .build(),
-                                        contentDescription = stage.pokemonName,
-                                        contentScale = ContentScale.Fit,
-                                        modifier = Modifier.size(64.dp)
-                                    )
-                                    Text(
-                                        text = stage.pokemonName,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = if (stage.pokemonId == pokemon.id) typeColor else TextSecondary
-                                    )
-                                    stage.minLevel?.let {
-                                        Text(
-                                            text = "Lv.$it",
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = TextTertiary
-                                        )
-                                    }
-                                }
 
-                                if (index < pokemon.evolutionChain.lastIndex) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                        contentDescription = null,
-                                        tint = TextTertiary,
-                                        modifier = Modifier.size(20.dp)
-                                    )
+                                    if (index < pokemon.evolutionChain.lastIndex) {
+                                        // Boxed to the sprite's height so the arrow lines up
+                                        // with the artwork rather than the taller column.
+                                        Box(
+                                            contentAlignment = Alignment.Center,
+                                            modifier = Modifier.height(EVOLUTION_SPRITE_SIZE)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                                contentDescription = null,
+                                                tint = TextTertiary,
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -845,6 +876,10 @@ private fun EncounterRow(
         )
     }
 }
+
+/** Each stage gets the same width so names ellipsize in a predictable box. */
+private val EVOLUTION_STAGE_WIDTH = 76.dp
+private val EVOLUTION_SPRITE_SIZE = 64.dp
 
 @Composable
 private fun InfoItem(label: String, value: String) {
