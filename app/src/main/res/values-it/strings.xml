@@ -158,4 +158,41 @@
     <string name="settings_language_device">Segue la lingua del dispositivo</string>
     <string name="settings_language_manual">Scelta manualmente</string>
     <string name="settings_language_follow">Lingua del dispositivo</string>
+
+    <string name="evo_level">Lv. %1$d</string>
+    <string name="evo_level_up">Salire di livello</string>
+    <string name="evo_friendship">Amicizia</string>
+    <string name="evo_beauty">Molta bellezza</string>
+    <string name="evo_affection">Molto affetto</string>
+    <string name="evo_knows_move">Conosce %1$s</string>
+    <string name="evo_knows_move_type">Mossa di %1$s</string>
+    <string name="evo_holding">Con %1$s</string>
+    <string name="evo_trade">Scambio</string>
+    <string name="evo_trade_for">Scambiare con %1$s</string>
+    <string name="evo_with_party">Con %1$s</string>
+    <string name="evo_use_item">Usare un oggetto</string>
+    <string name="evo_female">Femmina</string>
+    <string name="evo_male">Maschio</string>
+    <string name="evo_atk_gt_def">Att. &gt; Dif.</string>
+    <string name="evo_atk_lt_def">Att. &lt; Dif.</string>
+    <string name="evo_atk_eq_def">Att. = Dif.</string>
+    <string name="evo_rain">Con la pioggia</string>
+    <string name="evo_upside_down">Capovolto</string>
+    <string name="evo_time_day">Di giorno</string>
+    <string name="evo_time_night">Di notte</string>
+    <string name="evo_time_dusk">Al crepuscolo</string>
+    <string name="evo_time_full_moon">Luna piena</string>
+    <string name="evo_shed">Posto libero in squadra</string>
+    <string name="evo_spin">Girando</string>
+    <string name="evo_tower_of_darkness">Torre Tenebra</string>
+    <string name="evo_tower_of_waters">Torre Acqua</string>
+    <string name="evo_three_critical_hits">3 brutti colpi</string>
+    <string name="evo_take_damage">Subire danni</string>
+    <string name="evo_recoil_damage">Danno da contraccolpo</string>
+    <string name="evo_agile_style">Stile agile</string>
+    <string name="evo_strong_style">Stile potente</string>
+    <string name="evo_defeat_bisharp">Battere 3 Bisharp</string>
+    <string name="evo_gimmighoul_coins">999 monete</string>
+    <string name="evo_use_move">Usare una mossa</string>
+    <string name="evo_other">Speciale</string>
 </resources>

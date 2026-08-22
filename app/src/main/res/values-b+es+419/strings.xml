@@ -158,4 +158,41 @@
     <string name="settings_language_device">Siguiendo el idioma del dispositivo</string>
     <string name="settings_language_manual">Elegido manualmente</string>
     <string name="settings_language_follow">Idioma del dispositivo</string>
+
+    <string name="evo_level">Nv. %1$d</string>
+    <string name="evo_level_up">Subir de nivel</string>
+    <string name="evo_friendship">Amistad</string>
+    <string name="evo_beauty">Mucha belleza</string>
+    <string name="evo_affection">Mucho afecto</string>
+    <string name="evo_knows_move">Sabe %1$s</string>
+    <string name="evo_knows_move_type">Mov. de %1$s</string>
+    <string name="evo_holding">Con %1$s</string>
+    <string name="evo_trade">Intercambio</string>
+    <string name="evo_trade_for">Intercambiar por %1$s</string>
+    <string name="evo_with_party">Con %1$s</string>
+    <string name="evo_use_item">Usar un objeto</string>
+    <string name="evo_female">Hembra</string>
+    <string name="evo_male">Macho</string>
+    <string name="evo_atk_gt_def">At. &gt; Def.</string>
+    <string name="evo_atk_lt_def">At. &lt; Def.</string>
+    <string name="evo_atk_eq_def">At. = Def.</string>
+    <string name="evo_rain">Con lluvia</string>
+    <string name="evo_upside_down">Al revés</string>
+    <string name="evo_time_day">De día</string>
+    <string name="evo_time_night">De noche</string>
+    <string name="evo_time_dusk">Al anochecer</string>
+    <string name="evo_time_full_moon">Luna llena</string>
+    <string name="evo_shed">Hueco en el equipo</string>
+    <string name="evo_spin">Girando</string>
+    <string name="evo_tower_of_darkness">Torre Oscuridad</string>
+    <string name="evo_tower_of_waters">Torre Agua</string>
+    <string name="evo_three_critical_hits">3 golpes críticos</string>
+    <string name="evo_take_damage">Recibir daño</string>
+    <string name="evo_recoil_damage">Daño de retroceso</string>
+    <string name="evo_agile_style">Estilo ágil</string>
+    <string name="evo_strong_style">Estilo fuerte</string>
+    <string name="evo_defeat_bisharp">Vencer 3 Bisharp</string>
+    <string name="evo_gimmighoul_coins">999 monedas</string>
+    <string name="evo_use_move">Usar un movimiento</string>
+    <string name="evo_other">Especial</string>
 </resources>

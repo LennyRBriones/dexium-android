@@ -158,4 +158,41 @@
     <string name="settings_language_device">Suit la langue de l\'appareil</string>
     <string name="settings_language_manual">Choisie manuellement</string>
     <string name="settings_language_follow">Langue de l\'appareil</string>
+
+    <string name="evo_level">Nv. %1$d</string>
+    <string name="evo_level_up">Montée de niveau</string>
+    <string name="evo_friendship">Bonheur</string>
+    <string name="evo_beauty">Grande beauté</string>
+    <string name="evo_affection">Grande affection</string>
+    <string name="evo_knows_move">Connaît %1$s</string>
+    <string name="evo_knows_move_type">Capacité %1$s</string>
+    <string name="evo_holding">Tient %1$s</string>
+    <string name="evo_trade">Échange</string>
+    <string name="evo_trade_for">Échanger contre %1$s</string>
+    <string name="evo_with_party">Avec %1$s</string>
+    <string name="evo_use_item">Utiliser un objet</string>
+    <string name="evo_female">Femelle</string>
+    <string name="evo_male">Mâle</string>
+    <string name="evo_atk_gt_def">Att. &gt; Déf.</string>
+    <string name="evo_atk_lt_def">Att. &lt; Déf.</string>
+    <string name="evo_atk_eq_def">Att. = Déf.</string>
+    <string name="evo_rain">Sous la pluie</string>
+    <string name="evo_upside_down">À l\'envers</string>
+    <string name="evo_time_day">Le jour</string>
+    <string name="evo_time_night">La nuit</string>
+    <string name="evo_time_dusk">Au crépuscule</string>
+    <string name="evo_time_full_moon">Pleine lune</string>
+    <string name="evo_shed">Place libre dans l\'équipe</string>
+    <string name="evo_spin">En tournant</string>
+    <string name="evo_tower_of_darkness">Tour des Ténèbres</string>
+    <string name="evo_tower_of_waters">Tour de l\'Eau</string>
+    <string name="evo_three_critical_hits">3 coups critiques</string>
+    <string name="evo_take_damage">Subir des dégâts</string>
+    <string name="evo_recoil_damage">Dégâts de recul</string>
+    <string name="evo_agile_style">Style agile</string>
+    <string name="evo_strong_style">Style puissant</string>
+    <string name="evo_defeat_bisharp">Vaincre 3 Scalproie</string>
+    <string name="evo_gimmighoul_coins">999 pièces</string>
+    <string name="evo_use_move">Utiliser une capacité</string>
+    <string name="evo_other">Spécial</string>
 </resources>

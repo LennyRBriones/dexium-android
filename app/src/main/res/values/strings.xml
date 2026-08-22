@@ -170,4 +170,41 @@
     <string name="settings_language_device">Following the device language</string>
     <string name="settings_language_manual">Chosen manually</string>
     <string name="settings_language_follow">Device language</string>
+
+    <string name="evo_level">Lv. %1$d</string>
+    <string name="evo_level_up">Level up</string>
+    <string name="evo_friendship">Friendship</string>
+    <string name="evo_beauty">High beauty</string>
+    <string name="evo_affection">High affection</string>
+    <string name="evo_knows_move">Knows %1$s</string>
+    <string name="evo_knows_move_type">%1$s move</string>
+    <string name="evo_holding">Holding %1$s</string>
+    <string name="evo_trade">Trade</string>
+    <string name="evo_trade_for">Trade for %1$s</string>
+    <string name="evo_with_party">With %1$s</string>
+    <string name="evo_use_item">Use an item</string>
+    <string name="evo_female">Female</string>
+    <string name="evo_male">Male</string>
+    <string name="evo_atk_gt_def">Atk &gt; Def</string>
+    <string name="evo_atk_lt_def">Atk &lt; Def</string>
+    <string name="evo_atk_eq_def">Atk = Def</string>
+    <string name="evo_rain">Raining</string>
+    <string name="evo_upside_down">Upside down</string>
+    <string name="evo_time_day">Daytime</string>
+    <string name="evo_time_night">Nighttime</string>
+    <string name="evo_time_dusk">Dusk</string>
+    <string name="evo_time_full_moon">Full moon</string>
+    <string name="evo_shed">Empty party slot</string>
+    <string name="evo_spin">Spinning</string>
+    <string name="evo_tower_of_darkness">Tower of Darkness</string>
+    <string name="evo_tower_of_waters">Tower of Waters</string>
+    <string name="evo_three_critical_hits">3 critical hits</string>
+    <string name="evo_take_damage">Take damage</string>
+    <string name="evo_recoil_damage">Recoil damage</string>
+    <string name="evo_agile_style">Agile style</string>
+    <string name="evo_strong_style">Strong style</string>
+    <string name="evo_defeat_bisharp">Beat 3 Bisharp</string>
+    <string name="evo_gimmighoul_coins">999 coins</string>
+    <string name="evo_use_move">Use a move</string>
+    <string name="evo_other">Special</string>
 </resources>

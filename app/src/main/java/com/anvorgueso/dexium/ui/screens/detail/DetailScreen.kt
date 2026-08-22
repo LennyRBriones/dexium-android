@@ -60,6 +60,7 @@ import com.anvorgueso.dexium.core.util.toHeightString
 import com.anvorgueso.dexium.core.util.toWeightString
 import com.anvorgueso.dexium.domain.model.EncounterLocation
 import com.anvorgueso.dexium.domain.model.PokemonDetail
+import com.anvorgueso.dexium.ui.components.evolutionRequirementLabel
 import com.anvorgueso.dexium.ui.components.ErrorState
 import com.anvorgueso.dexium.ui.components.GameSelector
 import com.anvorgueso.dexium.ui.components.GlassCard
@@ -506,11 +507,22 @@ private fun DetailContent(
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.fillMaxWidth()
                                         )
-                                        stage.minLevel?.let {
+                                        // Two thirds of PokeAPI's evolutions need something
+                                        // other than a level, so the old "Lv.N"-only label left
+                                        // every stone, trade and friendship evolution blank.
+                                        evolutionRequirementLabel(
+                                            requirement = stage.requirement,
+                                            language = uiState.languageCode
+                                        )?.let { requirement ->
                                             Text(
-                                                text = "Lv.$it",
+                                                text = requirement,
                                                 style = MaterialTheme.typography.labelSmall,
-                                                color = TextTertiary
+                                                color = TextTertiary,
+                                                maxLines = 2,
+                                                overflow = TextOverflow.Ellipsis,
+                                                textAlign = TextAlign.Center,
+                                                lineHeight = 12.sp,
+                                                modifier = Modifier.fillMaxWidth()
                                             )
                                         }
                                     }
@@ -878,7 +890,7 @@ private fun EncounterRow(
 }
 
 /** Each stage gets the same width so names ellipsize in a predictable box. */
-private val EVOLUTION_STAGE_WIDTH = 76.dp
+private val EVOLUTION_STAGE_WIDTH = 92.dp
 private val EVOLUTION_SPRITE_SIZE = 64.dp
 
 @Composable
