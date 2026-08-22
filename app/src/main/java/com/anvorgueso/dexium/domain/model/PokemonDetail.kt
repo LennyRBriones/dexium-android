@@ -25,5 +25,12 @@ data class PokemonDetail(
      * preference — the detail screen's 3D toggle needs it available on demand.
      */
     val animated3dUrl: String?,
-    val shinyAnimated3dUrl: String?
+    val shinyAnimated3dUrl: String?,
+    /**
+     * Pokémon HOME render, used as the hologram's still frame when the animated sprite is
+     * missing. PokeAPI reports no Showdown sprite for the newest gen 9 entries, so without this
+     * the toggle switches itself off for them.
+     */
+    val still3dUrl: String?,
+    val shinyStill3dUrl: String?
 )

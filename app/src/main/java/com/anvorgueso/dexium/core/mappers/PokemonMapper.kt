@@ -278,7 +278,10 @@ object PokemonMapper {
             // is an explicit user action, so it must work even when the sprite preference is
             // set to artworks — otherwise flipping the switch would do nothing.
             animated3dUrl = animatedSpriteUrl,
-            shinyAnimated3dUrl = shinyAnimatedSpriteUrl
+            shinyAnimated3dUrl = shinyAnimatedSpriteUrl,
+            // Derived from the id rather than cached, same reasoning as the shiny paths above.
+            still3dUrl = buildHomeUrl(id),
+            shinyStill3dUrl = buildShinyHomeUrl(id)
         )
     }
 
@@ -296,6 +299,18 @@ object PokemonMapper {
 
     private fun buildShinyAnimatedSpriteUrl(pokemonId: Int): String {
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/$pokemonId.gif"
+    }
+
+    /**
+     * The HOME render is the sharpest still PokeAPI hosts, at 512x512 against the animated
+     * sprite's 60x60, and it exists for the five gen 9 entries whose Showdown sprite does not.
+     */
+    private fun buildHomeUrl(pokemonId: Int): String {
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/$pokemonId.png"
+    }
+
+    private fun buildShinyHomeUrl(pokemonId: Int): String {
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/$pokemonId.png"
     }
 
     private fun buildShinyArtworkUrl(pokemonId: Int): String {

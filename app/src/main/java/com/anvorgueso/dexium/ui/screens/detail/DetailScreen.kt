@@ -149,16 +149,21 @@ private fun DetailContent(
     // Arriving from the Shiny Dex, the sprite viewer starts on shiny too.
     var showShiny by remember(pokemon.id) { mutableStateOf(shiny) }
     var show3dModel by remember(pokemon.id) { mutableStateOf(false) }
-    // The animated sprite is missing for the newest gen 9 entries, so fall back to artwork
-    // rather than leaving the hero blank.
+    // PokeAPI reports no Showdown sprite for five gen 9 entries (Miraidon, Iron Leaves,
+    // Ogerpon, Terapagos, Pecharunt) and the URL derived for them 404s, which used to switch the
+    // toggle off entirely. The HOME render exists for all five, so the hologram degrades to a
+    // still frame first; only if that fails too does the hero drop back to plain artwork.
     var animatedFailed by remember(pokemon.id) { mutableStateOf(false) }
+    var still3dFailed by remember(pokemon.id) { mutableStateOf(false) }
 
     val animated3d = if (shiny) pokemon.shinyAnimated3dUrl else pokemon.animated3dUrl
+    val still3d = if (shiny) pokemon.shinyStill3dUrl else pokemon.still3dUrl
     val staticHero = if (shiny) pokemon.shinySpriteUrl ?: pokemon.imageUrl else pokemon.imageUrl
 
-    val has3dSprite = animated3d != null
-    val showing3d = show3dModel && has3dSprite && !animatedFailed
-    val heroImageUrl = if (showing3d) animated3d else staticHero
+    val hero3d = if (animatedFailed) still3d else animated3d
+    val has3dSprite = hero3d != null
+    val showing3d = show3dModel && has3dSprite && !still3dFailed
+    val heroImageUrl = if (showing3d) hero3d else staticHero
 
     Column(
         modifier = Modifier
@@ -233,7 +238,13 @@ private fun DetailContent(
                             contentDescription = pokemon.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier.size(if (showing3d) 140.dp else 200.dp),
-                            onError = { if (showing3d) animatedFailed = true }
+                            onError = {
+                                when {
+                                    !showing3d -> Unit
+                                    !animatedFailed -> animatedFailed = true
+                                    else -> still3dFailed = true
+                                }
+                            }
                         )
                     }
 
@@ -307,7 +318,7 @@ private fun DetailContent(
                         }
                         Switch(
                             checked = showing3d,
-                            enabled = has3dSprite && !animatedFailed,
+                            enabled = has3dSprite && !still3dFailed,
                             onCheckedChange = { show3dModel = it },
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = Color.White,
