@@ -20,9 +20,7 @@ object EvolutionMapper {
         useHdImages: Boolean
     ) {
         val pokemonId = chain.species.url.extractIdFromUrl()
-        // 44 links list more than one way to evolve; the first is the one the games document,
-        // and showing every alternative would not fit under a sprite.
-        val detail = chain.evolutionDetails.firstOrNull()
+        val detail = chain.evolutionDetails.pickDisplayable()
 
         stages.add(
             EvolutionStage(
@@ -40,6 +38,24 @@ object EvolutionMapper {
         chain.evolvesTo.forEach { next ->
             flattenChain(next, stages, useHdImages)
         }
+    }
+
+
+    /**
+     * 44 links list more than one way to evolve, and showing every alternative would not fit
+     * under a sprite. Two rules pick the one worth showing:
+     *
+     * Methods that produce a different form are dropped first, because the chain still shows the
+     * default species. Without this, Sandshrew would read "Ice Stone" when that stone actually
+     * gives Sandslash-Alola, and level 22 gives the Sandslash on screen.
+     *
+     * Among what is left, an item wins over anything else. PokeAPI orders methods oldest-first,
+     * so Leafeon led with the Eterna Forest mossy rock while the Leaf Stone — the method the
+     * current games use, and the one a player can act on — sat last of six.
+     */
+    private fun List<EvolutionDetailDto>.pickDisplayable(): EvolutionDetailDto? {
+        val defaultForm = filter { it.evolvedForm == null }.ifEmpty { this }
+        return defaultForm.firstOrNull { it.item != null } ?: defaultForm.firstOrNull()
     }
 
     private fun EvolutionDetailDto.toRequirement() = EvolutionRequirement(

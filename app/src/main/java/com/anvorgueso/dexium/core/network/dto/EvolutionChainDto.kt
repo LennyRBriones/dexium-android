@@ -26,6 +26,12 @@ data class ChainLinkDto(
 data class EvolutionDetailDto(
     @Json(name = "min_level") val minLevel: Int?,
     @Json(name = "trigger") val trigger: NamedApiResource?,
+    /**
+     * Set when this method produces a form other than the default one, like Sandshrew's Ice
+     * Stone leading to Sandslash-Alola. The chain still lists the default species, so a method
+     * carrying this does not describe the sprite being shown.
+     */
+    @Json(name = "evolved_form") val evolvedForm: NamedApiResource?,
     @Json(name = "item") val item: NamedApiResource?,
     @Json(name = "held_item") val heldItem: NamedApiResource?,
     @Json(name = "known_move") val knownMove: NamedApiResource?,
